@@ -5,12 +5,12 @@ import Image from 'next/image'
 import { CheckCircle, Truck, Package, Star, ChevronDown, Phone, ArrowRight } from 'lucide-react'
 
 const CATEGORIES = [
-  { name: 'Cement & Concrete', slug: 'cement-concrete', icon: '🏗️', img: '/images/WhatsApp Image 2026-06-03 at 17.27.00.jpeg', desc: 'Ghacem bags, concrete mix, aggregates' },
-  { name: 'Steel & Reinforcement', slug: 'steel-reinforcement', icon: '🔩', img: '/images/WhatsApp Image 2026-06-03 at 17.27.06.jpeg', desc: 'Rebar, BRC mesh, binding wire, Star Steels' },
-  { name: 'Roofing Materials', slug: 'roofing-materials', icon: '🏠', img: '/images/WhatsApp Image 2026-06-04 at 00.49.37.jpeg', desc: 'Zinc, aluminium, coloured sheets, fittings' },
-  { name: 'Paint & Finishes', slug: 'paint-finishes', icon: '🎨', img: '/images/WhatsApp Image 2026-06-04 at 00.49.38.jpeg', desc: 'De-Luxy acrylic paint, primers, solvents' },
-  { name: 'Tiles & Flooring', slug: 'tiles-flooring', icon: '🪟', img: '/images/WhatsApp Image 2026-06-04 at 00.49.37 (1).jpeg', desc: 'Ceramic, porcelain floor & wall tiles' },
-  { name: 'Hardware & Tools', slug: 'hardware-fasteners', icon: '🔧', img: '/images/WhatsApp Image 2026-06-03 at 17.27.10.jpeg', desc: 'Nails, screws, hand tools, wheelbarrows' },
+  { name: 'Cement & Concrete', slug: 'cement-concrete', icon: '🏗️', img: '/images/WhatsApp Image 2026-06-03 at 17.27.10.jpeg', desc: 'Ghacem bags, concrete mix, aggregates' },
+  { name: 'Steel & Reinforcement', slug: 'steel-reinforcement', icon: '🔩', img: '/images/WhatsApp Image 2026-06-03 at 17.27.00.jpeg', desc: 'Rebar, BRC mesh, binding wire, Star Steels' },
+  { name: 'Roofing Materials', slug: 'roofing-materials', icon: '🏠', img: '/images/WhatsApp Image 2026-06-04 at 00.49.37 (2).jpeg', desc: 'Zinc, aluminium, coloured sheets, fittings' },
+  { name: 'Paint & Finishes', slug: 'paint-finishes', icon: '🎨', img: '/images/WhatsApp Image 2026-06-03 at 17.27.21.jpeg', desc: 'De-Luxy acrylic paint, primers, solvents' },
+  { name: 'Tiles & Flooring', slug: 'tiles-flooring', icon: '🪟', img: '/images/WhatsApp Image 2026-06-03 at 17.27.15.jpeg', desc: 'Ceramic, porcelain floor & wall tiles' },
+  { name: 'Hardware & Tools', slug: 'hardware-fasteners', icon: '🔧', img: '/images/WhatsApp Image 2026-06-04 at 00.49.38.jpeg', desc: 'Nails, screws, hand tools, wheelbarrows' },
 ]
 
 const WHY_REASONS = [

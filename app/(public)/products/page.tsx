@@ -10,15 +10,15 @@ export const metadata: Metadata = {
 }
 
 const CATEGORIES = [
-  { name: 'Cement & Concrete', slug: 'cement-concrete', img: '/images/WhatsApp Image 2026-06-03 at 17.27.00.jpeg' },
-  { name: 'Steel & Reinforcement', slug: 'steel-reinforcement', img: '/images/WhatsApp Image 2026-06-03 at 17.27.06.jpeg' },
-  { name: 'Roofing Materials', slug: 'roofing-materials', img: '/images/WhatsApp Image 2026-06-04 at 00.49.37.jpeg' },
-  { name: 'Paint & Finishes', slug: 'paint-finishes', img: '/images/WhatsApp Image 2026-06-04 at 00.49.38.jpeg' },
-  { name: 'Tiles & Flooring', slug: 'tiles-flooring', img: '/images/WhatsApp Image 2026-06-04 at 00.49.37 (1).jpeg' },
-  { name: 'Timber & Lumber', slug: 'timber-lumber', img: '/images/WhatsApp Image 2026-06-03 at 17.27.25.jpeg' },
-  { name: 'Hardware & Fasteners', slug: 'hardware-fasteners', img: '/images/WhatsApp Image 2026-06-03 at 17.27.10.jpeg' },
-  { name: 'Tools & Equipment', slug: 'tools-equipment', img: '/images/WhatsApp Image 2026-06-03 at 17.27.15.jpeg' },
-  { name: 'Wire & Mesh', slug: 'wire-mesh', img: '/images/WhatsApp Image 2026-06-03 at 17.27.21.jpeg' },
+  { name: 'Cement & Concrete', slug: 'cement-concrete', img: '/images/WhatsApp Image 2026-06-03 at 17.27.10.jpeg' },
+  { name: 'Steel & Reinforcement', slug: 'steel-reinforcement', img: '/images/WhatsApp Image 2026-06-03 at 17.27.00.jpeg' },
+  { name: 'Roofing Materials', slug: 'roofing-materials', img: '/images/WhatsApp Image 2026-06-04 at 00.49.37 (2).jpeg' },
+  { name: 'Paint & Finishes', slug: 'paint-finishes', img: '/images/WhatsApp Image 2026-06-03 at 17.27.21.jpeg' },
+  { name: 'Tiles & Flooring', slug: 'tiles-flooring', img: '/images/WhatsApp Image 2026-06-03 at 17.27.15.jpeg' },
+  { name: 'Timber & Lumber', slug: 'timber-lumber', img: '/images/WhatsApp Image 2026-06-04 at 00.49.37 (1).jpeg' },
+  { name: 'Hardware & Fasteners', slug: 'hardware-fasteners', img: '/images/WhatsApp Image 2026-06-04 at 00.49.38.jpeg' },
+  { name: 'Tools & Equipment', slug: 'tools-equipment', img: '/images/WhatsApp Image 2026-06-03 at 17.26.55.jpeg' },
+  { name: 'Wire & Mesh', slug: 'wire-mesh', img: '/images/WhatsApp Image 2026-06-03 at 17.27.25.jpeg' },
   { name: 'Pipes & Plumbing', slug: 'pipes-plumbing', img: '/images/WhatsApp Image 2026-06-03 at 17.27.24.jpeg' },
   { name: 'Delivery Service', slug: 'delivery-service', img: '/images/WhatsApp Image 2026-06-04 at 00.49.38 (1).jpeg' },
 ]
