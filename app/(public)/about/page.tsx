@@ -1,3 +1,4 @@
+import { createClient } from '@/lib/supabase/server'
 import Image from 'next/image'
 import Link from 'next/link'
 import { CheckCircle } from 'lucide-react'
@@ -17,7 +18,16 @@ const VALUES = [
   'Community-focused — proud to serve Adeiso',
 ]
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const supabase = await createClient()
+  const { data: siteContent } = await supabase
+    .from('site_content')
+    .select('*')
+    .in('section', ['about', 'contact'])
+
+  const c = (key: string, fallback = '') =>
+    siteContent?.find(x => x.key === key)?.value || fallback
+
   return (
     <>
       {/* Page Header */}
@@ -37,18 +47,13 @@ export default function AboutPage() {
           <div>
             <span className="section-label">Our Story</span>
             <h2 className="text-2xl sm:text-3xl font-extrabold mt-2 mb-5" style={{ color: 'var(--heading-dark)' }}>
-              Built on Trust, Stocked for Your Project
+              {c('about_heading', 'Built on Trust, Stocked for Your Project')}
             </h2>
             <div className="space-y-4 text-sm leading-relaxed" style={{ color: 'var(--text-muted)' }}>
-              <p>
-                K.K. Danny Enterprise is a trusted building materials and hardware supply company based in Adeiso, Eastern Region, Ghana. We serve individual home builders, contractors, developers, and the broader construction community with quality products at competitive prices.
-              </p>
-              <p>
-                Our yard is fully stocked with cement, steel, roofing sheets, tiles, paint, timber, tools, wire, pipes, and more. When you need materials, we have them — from a single bag of cement to a full-site order for a large development project.
-              </p>
-              <p>
-                Located opposite the Radiance Gas Filling Station, near Point 3 Hotel in Adeiso, we are strategically positioned to serve the Eastern Region construction market. Our branded cargo tricycle delivers same-day to your site within Adeiso and surrounding communities.
-              </p>
+              {c('about_body', 'K.K. Danny Enterprise is a trusted building materials and hardware supply company based in Adeiso, Eastern Region, Ghana.')
+                .split('\n').filter(Boolean).map((para, i) => (
+                  <p key={i}>{para}</p>
+                ))}
             </div>
           </div>
           <div className="relative h-80 lg:h-96 rounded-xl overflow-hidden shadow-xl">
@@ -62,7 +67,7 @@ export default function AboutPage() {
         <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
           <span className="section-label">Our Mission</span>
           <p className="text-xl sm:text-2xl font-bold text-white mt-4 leading-relaxed">
-            &ldquo;To be Adeiso&apos;s most dependable building materials partner — delivering quality, honest pricing, and fast service on every order.&rdquo;
+            &ldquo;{c('about_mission', 'To be Adeiso\'s most dependable building materials partner — delivering quality, honest pricing, and fast service on every order.')}&rdquo;
           </p>
         </div>
       </section>
@@ -85,7 +90,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* Second gallery row */}
+      {/* Photo strip */}
       <section className="py-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 grid grid-cols-2 sm:grid-cols-4 gap-3">
           {[

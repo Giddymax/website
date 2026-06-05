@@ -1,3 +1,4 @@
+import { createClient } from '@/lib/supabase/server'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Phone, MapPin, Mail, Clock } from 'lucide-react'
@@ -7,7 +8,25 @@ export const metadata: Metadata = {
   description: 'Contact K.K. Danny Enterprise in Adeiso, Eastern Region, Ghana. Call, WhatsApp, or visit us.',
 }
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const supabase = await createClient()
+  const { data: siteContent } = await supabase
+    .from('site_content')
+    .select('*')
+    .eq('section', 'contact')
+
+  const c = (key: string, fallback = '') =>
+    siteContent?.find(x => x.key === key)?.value || fallback
+
+  const phones = [
+    c('phone1', '02444754803'),
+    c('phone2', '0249986118'),
+    c('phone3', '0240268125'),
+  ].filter(Boolean)
+
+  const address = c('address', 'Opp. Radiance Gas Filling Station, Near Point 3 Hotel, Adeiso, Eastern Region, Ghana')
+  const email = c('email', 'info@kkdannyenterprise.com')
+
   return (
     <>
       <div style={{ background: 'var(--navy)' }} className="py-14 sm:py-20">
@@ -19,8 +38,8 @@ export default function ContactPage() {
           </p>
         </div>
       </div>
+
       <section className="py-14 sm:py-20 max-w-5xl mx-auto px-4 sm:px-6 grid grid-cols-1 lg:grid-cols-2 gap-12">
-        {/* Contact Info */}
         <div>
           <h2 className="text-xl font-extrabold mb-6" style={{ color: 'var(--heading-dark)' }}>Find Us</h2>
           <div className="space-y-5">
@@ -30,29 +49,32 @@ export default function ContactPage() {
               </div>
               <div>
                 <div className="font-semibold text-sm mb-1" style={{ color: 'var(--heading-dark)' }}>Address</div>
-                <div className="text-sm" style={{ color: 'var(--text-muted)' }}>Opp. Radiance Gas Filling Station,<br />Near Point 3 Hotel,<br />Adeiso, Eastern Region, Ghana</div>
+                <div className="text-sm" style={{ color: 'var(--text-muted)' }}>{address}</div>
               </div>
             </div>
+
             <div className="flex items-start gap-4">
               <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0" style={{ background: 'rgba(200,150,12,0.12)' }}>
                 <Phone size={18} style={{ color: 'var(--gold)' }} />
               </div>
               <div>
                 <div className="font-semibold text-sm mb-2" style={{ color: 'var(--heading-dark)' }}>Phone Numbers</div>
-                {['02444754803', '0249986118', '0240268125'].map(n => (
+                {phones.map(n => (
                   <a key={n} href={`tel:+233${n.slice(1)}`} className="block text-sm font-medium hover:underline" style={{ color: 'var(--gold)' }}>{n}</a>
                 ))}
               </div>
             </div>
+
             <div className="flex items-start gap-4">
               <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0" style={{ background: 'rgba(200,150,12,0.12)' }}>
                 <Mail size={18} style={{ color: 'var(--gold)' }} />
               </div>
               <div>
                 <div className="font-semibold text-sm mb-1" style={{ color: 'var(--heading-dark)' }}>Email</div>
-                <a href="mailto:info@kkdannyenterprise.com" className="text-sm hover:underline" style={{ color: 'var(--gold)' }}>info@kkdannyenterprise.com</a>
+                <a href={`mailto:${email}`} className="text-sm hover:underline" style={{ color: 'var(--gold)' }}>{email}</a>
               </div>
             </div>
+
             <div className="flex items-start gap-4">
               <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0" style={{ background: 'rgba(200,150,12,0.12)' }}>
                 <Clock size={18} style={{ color: 'var(--gold)' }} />
@@ -68,16 +90,15 @@ export default function ContactPage() {
           </div>
 
           <div className="mt-8 flex flex-wrap gap-3">
-            <a href="https://wa.me/233244754803" target="_blank" rel="noopener noreferrer" className="btn-gold text-sm px-6 py-2.5">
+            <a href={`https://wa.me/233${phones[0]?.slice(1) || '244754803'}`} target="_blank" rel="noopener noreferrer" className="btn-gold text-sm px-6 py-2.5">
               WhatsApp Us
             </a>
-            <a href="tel:+233244754803" className="btn-outline-gold text-sm px-6 py-2.5">
+            <a href={`tel:+233${phones[0]?.slice(1) || '244754803'}`} className="btn-outline-gold text-sm px-6 py-2.5">
               Call Now
             </a>
           </div>
         </div>
 
-        {/* Map placeholder / Quick message */}
         <div>
           <h2 className="text-xl font-extrabold mb-6" style={{ color: 'var(--heading-dark)' }}>Send a Quick Message</h2>
           <div className="card p-6 space-y-4">

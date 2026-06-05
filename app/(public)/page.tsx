@@ -13,21 +13,21 @@ const CATEGORIES = [
   { name: 'Hardware & Tools', slug: 'hardware-fasteners', img: '/images/WhatsApp Image 2026-06-04 at 00.49.38.jpeg', desc: 'Nails, screws, hand tools, wheelbarrows' },
 ]
 
-const WHY_REASONS = [
-  { icon: CheckCircle, title: 'Always In Stock', body: 'Large ready inventory so your project never stalls. From one bag to a full-site order.' },
-  { icon: Star, title: 'Competitive Prices', body: 'Transparent pricing, no hidden costs. We source directly and pass the savings to you.' },
-  { icon: Truck, title: 'Fast Same-Day Delivery', body: 'Delivery within Adeiso and nearby communities via our branded cargo tricycle.' },
-  { icon: Package, title: 'Trusted & Reliable', body: 'Years of service to the Adeiso community. Your project success is our reputation.' },
-]
+const WHY_ICONS = [CheckCircle, Star, Truck, Package]
 
 export default async function HomePage() {
   const supabase = await createClient()
 
-  const [{ data: slides }, { data: gallery }, { data: faqs }] = await Promise.all([
+  const [{ data: slides }, { data: gallery }, { data: siteContent }] = await Promise.all([
     supabase.from('hero_slides').select('*').eq('is_active', true).order('sort_order'),
     supabase.from('gallery_items').select('*').eq('is_active', true).order('sort_order').limit(8),
-    supabase.from('site_content').select('*').eq('section', 'faq').order('key'),
+    supabase.from('site_content').select('*'),
   ])
+
+  const c = (key: string, fallback = '') =>
+    siteContent?.find(x => x.key === key)?.value || fallback
+
+  const faqs = siteContent?.filter(f => f.section === 'faq') || []
 
   const faqPairs: { q: string; a: string }[] = []
   if (faqs) {
@@ -90,15 +90,20 @@ export default async function HomePage() {
             </p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {WHY_REASONS.map(reason => (
-              <div key={reason.title} className="rounded-lg p-6 text-center" style={{ background: 'var(--navy-light)', border: '1px solid #1e2e3c' }}>
-                <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4" style={{ background: 'rgba(200,150,12,0.12)' }}>
-                  <reason.icon size={26} style={{ color: 'var(--gold)' }} />
+            {[1, 2, 3, 4].map(n => {
+              const Icon = WHY_ICONS[n - 1]
+              const title = c(`why${n}_title`, ['Always In Stock', 'Competitive Prices', 'Fast Same-Day Delivery', 'Trusted & Reliable'][n - 1])
+              const body = c(`why${n}_body`)
+              return (
+                <div key={n} className="rounded-lg p-6 text-center" style={{ background: 'var(--navy-light)', border: '1px solid #1e2e3c' }}>
+                  <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4" style={{ background: 'rgba(200,150,12,0.12)' }}>
+                    <Icon size={26} style={{ color: 'var(--gold)' }} />
+                  </div>
+                  <h3 className="text-white font-bold mb-2">{title}</h3>
+                  <p className="text-sm leading-relaxed" style={{ color: '#8a9ba8' }}>{body}</p>
                 </div>
-                <h3 className="text-white font-bold mb-2">{reason.title}</h3>
-                <p className="text-sm leading-relaxed" style={{ color: '#8a9ba8' }}>{reason.body}</p>
-              </div>
-            ))}
+              )
+            })}
           </div>
         </div>
       </section>
@@ -204,13 +209,13 @@ export default async function HomePage() {
           <div>
             <div className="mb-3 flex justify-center"><MapPin size={22} style={{ color: 'var(--gold)' }} /></div>
             <div className="text-white font-bold mb-1">Visit Us</div>
-            <div className="text-sm" style={{ color: '#8a9ba8' }}>Opp. Radiance Gas Filling Station, Near Point 3 Hotel, Adeiso, Eastern Region</div>
+            <div className="text-sm" style={{ color: '#8a9ba8' }}>{c('address', 'Opp. Radiance Gas Filling Station, Near Point 3 Hotel, Adeiso, Eastern Region')}</div>
           </div>
           <div>
             <div className="mb-3 flex justify-center"><Phone size={22} style={{ color: 'var(--gold)' }} /></div>
             <div className="text-white font-bold mb-1">Call Us</div>
             <div className="space-y-1">
-              {['02444754803', '0249986118', '0240268125'].map(n => (
+              {[c('phone1', '02444754803'), c('phone2', '0249986118'), c('phone3', '0240268125')].filter(Boolean).map(n => (
                 <a key={n} href={`tel:+233${n.slice(1)}`} className="block text-sm hover:text-white transition-colors" style={{ color: '#8a9ba8' }}>{n}</a>
               ))}
             </div>
