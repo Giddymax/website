@@ -1,7 +1,7 @@
 'use client'
 import { useRef } from 'react'
 import { formatCurrency } from '@/lib/utils'
-import { X, Printer } from 'lucide-react'
+import { X, Printer, FileDown } from 'lucide-react'
 import type { Sale, SaleItem } from '@/types/database'
 
 interface Props {
@@ -14,29 +14,32 @@ interface Props {
 export default function ReceiptModal({ sale, items, staffName, onClose }: Props) {
   const receiptRef = useRef<HTMLDivElement>(null)
 
-  const printReceipt = () => {
+  function openPrintWindow(pageSize: string) {
     const content = receiptRef.current?.innerHTML || ''
-    const win = window.open('', '_blank', 'width=400,height=700')
+    const base = window.location.origin
+    const win = window.open('', '_blank', 'width=500,height=750')
     if (!win) return
     win.document.write(`
-      <html><head><title>Receipt ${sale.sale_ref}</title>
-      <style>
-        body { font-family: 'Courier New', monospace; font-size: 12px; margin: 0; padding: 16px; width: 302px; background: white; color: black; }
-        .center { text-align: center; }
-        .bold { font-weight: bold; }
-        .divider { border-top: 1px dashed #000; margin: 6px 0; }
-        .row { display: flex; justify-content: space-between; margin: 2px 0; }
-        .logo { font-size: 14px; font-weight: bold; }
-        img { max-width: 100px; display: block; margin: 0 auto 6px; }
-        table { width: 100%; border-collapse: collapse; }
-        td { vertical-align: top; padding: 1px 0; font-size: 11px; }
-      </style></head>
+      <html><head>
+        <title>Receipt ${sale.sale_ref}</title>
+        <base href="${base}/">
+        <style>
+          @page { size: ${pageSize}; margin: 10mm; }
+          body { font-family: 'Courier New', monospace; font-size: 12px; margin: 0; padding: 16px; background: white; color: black; }
+          img { max-width: 100px; display: block; margin: 0 auto 6px; }
+          table { width: 100%; border-collapse: collapse; }
+          td { vertical-align: top; padding: 1px 0; font-size: 11px; }
+        </style>
+      </head>
       <body>${content}</body></html>
     `)
     win.document.close()
     win.focus()
-    setTimeout(() => { win.print(); win.close() }, 250)
+    setTimeout(() => { win.print(); win.close() }, 400)
   }
+
+  const printReceipt = () => openPrintWindow('80mm auto')
+  const saveAsPDF = () => openPrintWindow('A4')
 
   const date = new Date(sale.created_at)
   const dateStr = date.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' })
@@ -113,11 +116,18 @@ export default function ReceiptModal({ sale, items, staffName, onClose }: Props)
           </div>
         </div>
 
-        <div className="flex gap-3 px-5 py-4" style={{ borderTop: '1px solid #1e2e3c' }}>
+        <div className="flex gap-2 px-5 py-4" style={{ borderTop: '1px solid #1e2e3c' }}>
           <button onClick={printReceipt} className="btn-gold flex-1 flex items-center justify-center gap-2 py-2.5 text-sm">
-            <Printer size={15} /> Print Receipt
+            <Printer size={15} /> Print
           </button>
-          <button onClick={onClose} className="flex-1 py-2.5 text-sm rounded font-semibold text-gray-300 hover:text-white transition-colors" style={{ background: '#1e2a35', border: '1px solid #374d5e' }}>
+          <button onClick={saveAsPDF}
+            className="flex-1 flex items-center justify-center gap-2 py-2.5 text-sm rounded font-semibold transition-colors hover:text-white"
+            style={{ background: '#1e3a2e', border: '1px solid #2d6a4f', color: '#4ade80' }}>
+            <FileDown size={15} /> Save PDF
+          </button>
+          <button onClick={onClose}
+            className="flex-1 py-2.5 text-sm rounded font-semibold text-gray-300 hover:text-white transition-colors"
+            style={{ background: '#1e2a35', border: '1px solid #374d5e' }}>
             Close
           </button>
         </div>
