@@ -1,0 +1,36 @@
+{
+  "name": "kkdanny-enterprise",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "next": "^15.3.3",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "@supabase/supabase-js": "^2.49.8",
+    "@supabase/ssr": "^0.5.2",
+    "lucide-react": "^0.511.0",
+    "recharts": "^2.15.3",
+    "react-hot-toast": "^2.5.2",
+    "resend": "^4.5.2",
+    "@react-email/components": "^0.0.37",
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^3.3.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3",
+    "@types/node": "^22.15.29",
+    "@types/react": "^19.1.6",
+    "@types/react-dom": "^19.1.5",
+    "tailwindcss": "^4.1.8",
+    "@tailwindcss/postcss": "^4.1.8",
+    "postcss": "^8.5.4",
+    "eslint": "^9.29.0",
+    "eslint-config-next": "^15.3.3"
+  }
+}
