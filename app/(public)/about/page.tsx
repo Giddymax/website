@@ -51,7 +51,7 @@ export default async function AboutPage() {
             </h2>
             <div className="space-y-4 text-sm leading-relaxed" style={{ color: 'var(--text-muted)' }}>
               {c('about_body', 'K.K. Danny Enterprise is a trusted building materials and hardware supply company based in Adeiso, Eastern Region, Ghana.')
-                .split('\n').filter(Boolean).map((para, i) => (
+                .split('\n').filter(Boolean).map((para: string, i: number) => (
                   <p key={i}>{para}</p>
                 ))}
             </div>
