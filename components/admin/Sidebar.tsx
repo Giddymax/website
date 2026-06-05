@@ -1,12 +1,14 @@
 'use client'
 import Link from 'next/link'
 import Image from 'next/image'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import {
   LayoutDashboard, ShoppingCart, BarChart3, Package, MessageSquare,
   FileText, Image as ImageIcon, Layers, BookOpen, Link2, Palette,
-  Users, Newspaper, X, ChevronRight
+  Users, Newspaper, X, ChevronRight, LogOut
 } from 'lucide-react'
+import { createClient } from '@/lib/supabase/client'
+import toast from 'react-hot-toast'
 
 const NAV = [
   { label: 'Dashboard', href: '/admin', icon: LayoutDashboard },
@@ -34,6 +36,14 @@ interface Props {
 
 export default function Sidebar({ open, onClose, role }: Props) {
   const path = usePathname()
+  const router = useRouter()
+
+  async function handleSignOut() {
+    const supabase = createClient()
+    await supabase.auth.signOut()
+    toast.success('Signed out')
+    router.push('/admin/login')
+  }
 
   const isActive = (href: string) =>
     href === '/admin' ? path === '/admin' : path.startsWith(href)
@@ -78,10 +88,17 @@ export default function Sidebar({ open, onClose, role }: Props) {
         </nav>
 
         {/* Footer */}
-        <div className="p-4" style={{ borderTop: '1px solid #1e2e3c' }}>
+        <div className="p-4 space-y-2" style={{ borderTop: '1px solid #1e2e3c' }}>
           <Link href="/" className="flex items-center gap-2 text-xs text-gray-500 hover:text-gray-300 transition-colors">
             <span>↗</span> View Public Site
           </Link>
+          <button
+            type="button"
+            onClick={handleSignOut}
+            className="flex items-center gap-2 text-xs text-gray-500 hover:text-red-400 transition-colors w-full"
+          >
+            <LogOut size={13} /> Sign Out
+          </button>
         </div>
       </aside>
     </>
