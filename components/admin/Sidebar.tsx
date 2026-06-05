@@ -4,8 +4,8 @@ import Image from 'next/image'
 import { usePathname, useRouter } from 'next/navigation'
 import {
   LayoutDashboard, ShoppingCart, BarChart3, Package, MessageSquare,
-  FileText, Image as ImageIcon, Layers, BookOpen, Link2, Palette,
-  Users, Newspaper, X, ChevronRight, LogOut
+  FileText, Image as ImageIcon, Layers, Link2, Palette,
+  Users, X, ChevronRight, LogOut
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import toast from 'react-hot-toast'
@@ -20,7 +20,6 @@ const NAV = [
   { label: 'Hero Slides', href: '/admin/hero-slides', icon: Layers },
   { label: 'Gallery', href: '/admin/gallery', icon: ImageIcon },
   { label: 'Products', href: '/admin/products', icon: Package },
-  { label: 'Blog', href: '/admin/blog', icon: BookOpen },
   { label: 'Social Links', href: '/admin/social-links', icon: Link2 },
   { label: 'Theme', href: '/admin/theme', icon: Palette },
   { label: 'Staff', href: '/admin/staff', icon: Users },
