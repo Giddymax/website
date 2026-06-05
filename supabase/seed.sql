@@ -108,6 +108,9 @@ INSERT INTO site_content (key, value, section) VALUES
 ('faq4_a', 'We primarily stock Ghacem cement and Star Steels reinforcement bars. We carry both popular market brands and alternatives.', 'faq'),
 ('faq5_q', 'Do you accept Mobile Money payment?', 'faq'),
 ('faq5_a', 'Yes. We accept cash, Mobile Money (MTN MoMo, AirtelTigo Money, Telecel Cash), and bank transfer.', 'faq'),
+-- Header / Navbar
+('header_phone', '02444754803', 'header'),
+('header_tagline', 'Building Materials & Services', 'header'),
 -- Footer
 ('footer_tagline', 'Adeiso''s most reliable source for cement, steel, roofing, paint, tiles, timber, tools, and more.', 'footer'),
 ('footer_copyright', '© 2025 K.K. Danny Enterprise. All rights reserved.', 'footer'),

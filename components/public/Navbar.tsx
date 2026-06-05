@@ -4,6 +4,11 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Menu, X, ChevronDown, Phone } from 'lucide-react'
 
+interface NavbarProps {
+  phone?: string
+  tagline?: string
+}
+
 const NAV_LINKS = [
   { label: 'Home', href: '/' },
   { label: 'About', href: '/about' },
@@ -25,7 +30,7 @@ const PRODUCT_LINKS = [
   { label: 'Delivery Service', href: '/delivery' },
 ]
 
-export default function Navbar() {
+export default function Navbar({ phone = '02444754803', tagline = 'Building Materials & Services' }: NavbarProps) {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [productsOpen, setProductsOpen] = useState(false)
@@ -51,7 +56,7 @@ export default function Navbar() {
               </div>
               <div className="hidden sm:block">
                 <div className="text-white font-extrabold text-sm leading-tight tracking-wide">K.K. DANNY ENTERPRISE</div>
-                <div style={{ color: 'var(--text-muted)' }} className="text-[10px] font-medium tracking-widest uppercase">Building Materials & Services</div>
+                <div style={{ color: 'var(--text-muted)' }} className="text-[10px] font-medium tracking-widest uppercase">{tagline}</div>
               </div>
             </Link>
 
@@ -87,8 +92,8 @@ export default function Navbar() {
 
             {/* CTA + Mobile Toggle */}
             <div className="flex items-center gap-2">
-              <a href="tel:+233244754803" style={{ color: 'var(--gold)' }} className="hidden sm:flex items-center gap-1.5 text-sm font-semibold">
-                <Phone size={14} /> 02444754803
+              <a href={`tel:+233${phone.replace(/^0/, '')}`} style={{ color: 'var(--gold)' }} className="hidden sm:flex items-center gap-1.5 text-sm font-semibold">
+                <Phone size={14} /> {phone}
               </a>
               <Link href="/quote" className="btn-gold hidden sm:inline-flex text-xs px-4 py-2">
                 Get Quote
@@ -128,7 +133,7 @@ export default function Navbar() {
               <Link href="/quote" className="btn-gold w-full text-center" onClick={() => setMobileOpen(false)}>
                 Get a Quote
               </Link>
-              <a href="tel:+233244754803" className="btn-outline-gold w-full text-center">
+              <a href={`tel:+233${phone.replace(/^0/, '')}`} className="btn-outline-gold w-full text-center">
                 <Phone size={16} /> Call Now
               </a>
             </div>
