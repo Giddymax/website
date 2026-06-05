@@ -8,7 +8,6 @@ CREATE TYPE user_role AS ENUM ('admin', 'staff');
 CREATE TYPE sale_status AS ENUM ('completed', 'partial', 'cancelled');
 CREATE TYPE payment_method AS ENUM ('cash', 'mobile_money', 'bank_transfer', 'card');
 CREATE TYPE quote_status AS ENUM ('new', 'reviewed', 'quoted', 'completed', 'cancelled');
-CREATE TYPE blog_status AS ENUM ('draft', 'published');
 CREATE TYPE stock_unit AS ENUM ('bag', 'sheet', 'roll', 'tin', 'piece', 'kg', 'metre', 'bundle', 'set');
 
 -- ============================================================
@@ -169,26 +168,6 @@ CREATE TRIGGER trg_hero_slides_updated_at BEFORE UPDATE ON hero_slides
   FOR EACH ROW EXECUTE FUNCTION set_updated_at();
 
 -- ============================================================
--- BLOG POSTS
--- ============================================================
-CREATE TABLE blog_posts (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  title TEXT NOT NULL,
-  slug TEXT NOT NULL UNIQUE,
-  category TEXT,
-  excerpt TEXT,
-  content TEXT NOT NULL DEFAULT '',
-  cover_url TEXT,
-  status blog_status NOT NULL DEFAULT 'draft',
-  author TEXT,
-  published_at TIMESTAMPTZ,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-);
-CREATE TRIGGER trg_blog_posts_updated_at BEFORE UPDATE ON blog_posts
-  FOR EACH ROW EXECUTE FUNCTION set_updated_at();
-
--- ============================================================
 -- GALLERY ITEMS
 -- ============================================================
 CREATE TABLE gallery_items (
@@ -258,7 +237,6 @@ ALTER TABLE inventory_items ENABLE ROW LEVEL SECURITY;
 ALTER TABLE sales ENABLE ROW LEVEL SECURITY;
 ALTER TABLE sale_items ENABLE ROW LEVEL SECURITY;
 ALTER TABLE hero_slides ENABLE ROW LEVEL SECURITY;
-ALTER TABLE blog_posts ENABLE ROW LEVEL SECURITY;
 ALTER TABLE gallery_items ENABLE ROW LEVEL SECURITY;
 ALTER TABLE site_content ENABLE ROW LEVEL SECURITY;
 ALTER TABLE social_links ENABLE ROW LEVEL SECURITY;
@@ -285,10 +263,6 @@ CREATE POLICY "Staff manage sale_items" ON sale_items FOR ALL USING (is_staff())
 -- hero_slides
 CREATE POLICY "Public read active slides" ON hero_slides FOR SELECT USING (is_active = true);
 CREATE POLICY "Admin manage slides" ON hero_slides FOR ALL USING (is_admin());
-
--- blog_posts
-CREATE POLICY "Public read published posts" ON blog_posts FOR SELECT USING (status = 'published');
-CREATE POLICY "Staff manage posts" ON blog_posts FOR ALL USING (is_staff());
 
 -- gallery_items
 CREATE POLICY "Public read active gallery" ON gallery_items FOR SELECT USING (is_active = true);

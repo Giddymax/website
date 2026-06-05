@@ -94,7 +94,6 @@ export default async function AdminDashboard() {
             { label: 'New Sale (POS)', href: '/admin/pos', color: 'var(--gold)', textColor: '#000' },
             { label: 'View Quotes', href: '/admin/quotes', color: '#1e2e3c', textColor: '#e8edf2' },
             { label: 'Manage Inventory', href: '/admin/inventory', color: '#1e2e3c', textColor: '#e8edf2' },
-            { label: 'Add Blog Post', href: '/admin/blog', color: '#1e2e3c', textColor: '#e8edf2' },
             { label: 'Manage Hero Slides', href: '/admin/hero-slides', color: '#1e2e3c', textColor: '#e8edf2' },
           ].map(a => (
             <Link key={a.href} href={a.href}

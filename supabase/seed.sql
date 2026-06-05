@@ -132,25 +132,3 @@ INSERT INTO gallery_items (label, image_url, category, sort_order) VALUES
 ('Hardware & Tools', '/images/gallery-hardware.jpg', 'Store Interior', 5),
 ('Delivery Tricycle', '/images/gallery-delivery.jpg', 'Delivery', 6);
 
--- BLOG POSTS
-INSERT INTO blog_posts (title, slug, category, excerpt, content, status, author, published_at) VALUES
-(
-  'How to Choose the Right Cement for Your Project',
-  'how-to-choose-cement',
-  'Guides',
-  'Not all cement is the same. Learn which grade to use for foundations, blocks, screed, and plaster.',
-  '<h2>Introduction</h2><p>Choosing the right cement grade is critical to the strength and durability of your structure. In Ghana, the most commonly available grades are OPC 32.5 and OPC 42.5.</p><h2>OPC 32.5R</h2><p>Suitable for general construction — blocks, plaster, screed, and mortar. Most widely used and most affordable.</p><h2>OPC 42.5R</h2><p>Higher strength grade for foundations, columns, beams, and slabs where structural strength matters most.</p><h2>Tips</h2><ul><li>Always check the bag is sealed and dry</li><li>Store cement off the ground on pallets</li><li>Use within 3 months of purchase for best results</li></ul><p>Visit K.K. Danny Enterprise in Adeiso for Ghacem cement in all grades. Call <strong>02444754803</strong> for bulk pricing.</p>',
-  'published',
-  'K.K. Danny Enterprise',
-  NOW() - INTERVAL '7 days'
-),
-(
-  'A Guide to Rebar Sizes and Their Uses',
-  'rebar-sizes-guide',
-  'Guides',
-  'Understand the difference between 8mm, 10mm, 12mm, 16mm, and 20mm rebar for different structural elements.',
-  '<h2>Rebar in Construction</h2><p>Reinforcement bars (rebar) are the steel backbone of reinforced concrete. Selecting the correct size for each element ensures structural integrity and cost-efficiency.</p><h2>Common Sizes</h2><ul><li><strong>8mm:</strong> Light work, column ties, stirrups, slab mesh</li><li><strong>10mm:</strong> Floor slabs, light beams, residential columns</li><li><strong>12mm:</strong> Main bars for beams, columns in residential structures</li><li><strong>16mm:</strong> Heavy-duty beams and columns in commercial structures</li><li><strong>20mm:</strong> High-load structural members, foundations</li></ul><p>We stock all standard sizes at competitive prices. Visit us or call <strong>02444754803</strong>.</p>',
-  'published',
-  'K.K. Danny Enterprise',
-  NOW() - INTERVAL '14 days'
-);

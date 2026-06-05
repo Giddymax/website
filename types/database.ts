@@ -2,7 +2,6 @@ export type UserRole = 'admin' | 'staff'
 export type SaleStatus = 'completed' | 'partial' | 'cancelled'
 export type PaymentMethod = 'cash' | 'mobile_money' | 'bank_transfer' | 'card'
 export type QuoteStatus = 'new' | 'reviewed' | 'quoted' | 'completed' | 'cancelled'
-export type BlogStatus = 'draft' | 'published'
 export type StockUnit = 'bag' | 'sheet' | 'roll' | 'tin' | 'piece' | 'kg' | 'metre' | 'bundle' | 'set'
 
 export interface Profile {
@@ -92,21 +91,6 @@ export interface HeroSlide {
   image_url: string | null
   sort_order: number
   is_active: boolean
-  created_at: string
-  updated_at: string
-}
-
-export interface BlogPost {
-  id: string
-  title: string
-  slug: string
-  category: string | null
-  excerpt: string | null
-  content: string
-  cover_url: string | null
-  status: BlogStatus
-  author: string | null
-  published_at: string | null
   created_at: string
   updated_at: string
 }
