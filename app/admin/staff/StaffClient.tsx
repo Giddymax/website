@@ -204,7 +204,7 @@ export default function StaffClient({ staff: initial, currentUserId, currentRole
                   value={addForm.full_name}
                   onChange={e => setAddForm(f => ({ ...f, full_name: e.target.value }))}
                   className="w-full px-3 py-2 rounded-lg text-sm text-white outline-none focus:ring-1"
-                  style={{ background: '#0a1628', border: '1px solid #1e2e3c', focusRingColor: 'var(--gold)' }} />
+                  style={{ background: '#0a1628', border: '1px solid #1e2e3c' }} />
               </div>
               <div>
                 <label htmlFor="add-email" className="block text-xs font-semibold mb-1.5" style={{ color: '#8a9ba8' }}>Email Address *</label>
