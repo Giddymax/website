@@ -87,7 +87,7 @@ export default function ContactPage() {
             </p>
             <div className="rounded-xl overflow-hidden h-56 bg-gray-100 flex items-center justify-center" style={{ border: '1px solid var(--border)' }}>
               <div className="text-center p-4">
-                <div className="text-3xl mb-2">📍</div>
+                <div className="mb-2 flex justify-center"><MapPin size={28} style={{ color: 'var(--gold)' }} /></div>
                 <div className="text-sm font-semibold mb-1" style={{ color: 'var(--heading-dark)' }}>K.K. Danny Enterprise</div>
                 <div className="text-xs" style={{ color: 'var(--text-muted)' }}>Opp. Radiance Gas Filling Station<br />Adeiso, Eastern Region</div>
                 <a href="https://www.google.com/maps/search/Radiance+Gas+Filling+Station+Adeiso+Ghana" target="_blank" rel="noopener noreferrer"

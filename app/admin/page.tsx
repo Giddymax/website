@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import { formatCurrency, formatDateTime } from '@/lib/utils'
-import { BarChart3, MessageSquare, TrendingUp, AlertTriangle } from 'lucide-react'
+import { BarChart3, MessageSquare, TrendingUp, AlertTriangle, Wallet } from 'lucide-react'
 import RevenueChart from './RevenueChart'
 
 export default async function AdminDashboard() {
@@ -13,7 +13,7 @@ export default async function AdminDashboard() {
     { data: allInventory },
     { data: recentSales },
   ] = await Promise.all([
-    supabase.from('sales').select('total, status').neq('status', 'cancelled'),
+    supabase.from('sales').select('total, status, balance_due').neq('status', 'cancelled'),
     supabase.from('quote_requests').select('id').eq('status', 'new'),
     supabase.from('inventory_items').select('id, name, stock_quantity, low_stock_threshold, is_service').eq('is_active', true),
     supabase.from('sales').select('*, profiles(full_name)').order('created_at', { ascending: false }).limit(8),
@@ -27,6 +27,7 @@ export default async function AdminDashboard() {
   const totalSales = salesData?.length || 0
   const pendingCount = pendingQuotes?.length || 0
   const lowStockCount = lowStock?.length || 0
+  const totalOutstandingBalance = salesData?.filter(s => s.status === 'partial').reduce((sum, s) => sum + (s.balance_due || 0), 0) || 0
 
   // Build 6-month chart data manually if RPC unavailable
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
@@ -45,27 +46,40 @@ export default async function AdminDashboard() {
   }
 
   const STATS = [
-    { label: 'Total Revenue', value: formatCurrency(totalRevenue), icon: TrendingUp, color: '#C8960C', bg: 'rgba(200,150,12,0.1)' },
-    { label: 'Total Sales', value: String(totalSales), icon: BarChart3, color: '#4ade80', bg: 'rgba(74,222,128,0.1)' },
-    { label: 'Pending Quotes', value: String(pendingCount), icon: MessageSquare, color: '#60a5fa', bg: 'rgba(96,165,250,0.1)' },
-    { label: 'Low Stock Items', value: String(lowStockCount), icon: AlertTriangle, color: '#f87171', bg: 'rgba(248,113,113,0.1)' },
+    { label: 'Total Revenue', value: formatCurrency(totalRevenue), icon: TrendingUp, color: '#C8960C', bg: 'rgba(200,150,12,0.1)', href: null },
+    { label: 'Total Sales', value: String(totalSales), icon: BarChart3, color: '#4ade80', bg: 'rgba(74,222,128,0.1)', href: null },
+    { label: 'Pending Quotes', value: String(pendingCount), icon: MessageSquare, color: '#60a5fa', bg: 'rgba(96,165,250,0.1)', href: null },
+    { label: 'Low Stock Items', value: String(lowStockCount), icon: AlertTriangle, color: '#f87171', bg: 'rgba(248,113,113,0.1)', href: null },
+    { label: 'Outstanding Balances', value: formatCurrency(totalOutstandingBalance), icon: Wallet, color: '#fb923c', bg: 'rgba(251,146,60,0.1)', href: '/admin/sales?status=partial' },
   ]
 
   return (
     <div className="space-y-6">
       {/* Stat Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        {STATS.map(s => (
-          <div key={s.label} className="rounded-xl p-5" style={{ background: 'var(--navy)', border: '1px solid #1e2e3c' }}>
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: '#8a9ba8' }}>{s.label}</span>
-              <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: s.bg }}>
-                <s.icon size={15} style={{ color: s.color }} />
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+        {STATS.map(s => {
+          const inner = (
+            <>
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-xs font-semibold uppercase tracking-wider" style={{ color: '#8a9ba8' }}>{s.label}</span>
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: s.bg }}>
+                  <s.icon size={15} style={{ color: s.color }} />
+                </div>
               </div>
+              <div className="text-2xl font-extrabold text-white">{s.value}</div>
+            </>
+          )
+          return s.href ? (
+            <Link key={s.label} href={s.href} className="rounded-xl p-5 block hover:ring-1 transition-all" style={{ background: 'var(--navy)', border: '1px solid #1e2e3c', '--tw-ring-color': s.color } as React.CSSProperties}>
+              {inner}
+              <div className="text-[10px] mt-1 font-semibold" style={{ color: s.color }}>View partial sales →</div>
+            </Link>
+          ) : (
+            <div key={s.label} className="rounded-xl p-5" style={{ background: 'var(--navy)', border: '1px solid #1e2e3c' }}>
+              {inner}
             </div>
-            <div className="text-2xl font-extrabold text-white">{s.value}</div>
-          </div>
-        ))}
+          )
+        })}
       </div>
 
       {/* Chart + Quick Actions */}

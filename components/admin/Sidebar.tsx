@@ -10,10 +10,10 @@ import {
 
 const NAV = [
   { label: 'Dashboard', href: '/admin', icon: LayoutDashboard },
-  { label: 'POS', href: '/admin/pos', icon: ShoppingCart },
+  { label: 'Point of Sale', href: '/admin/pos', icon: ShoppingCart },
   { label: 'Sales', href: '/admin/sales', icon: BarChart3 },
   { label: 'Inventory', href: '/admin/inventory', icon: Package },
-  { label: 'Quotes', href: '/admin/quotes', icon: MessageSquare },
+  { label: 'Quote Requests', href: '/admin/quotes', icon: MessageSquare },
   { label: 'Content', href: '/admin/content', icon: FileText },
   { label: 'Hero Slides', href: '/admin/hero-slides', icon: Layers },
   { label: 'Gallery', href: '/admin/gallery', icon: ImageIcon },
@@ -23,6 +23,8 @@ const NAV = [
   { label: 'Theme', href: '/admin/theme', icon: Palette },
   { label: 'Staff', href: '/admin/staff', icon: Users },
 ]
+
+const STAFF_HREFS = new Set(['/admin/pos', '/admin/sales', '/admin/inventory', '/admin/quotes'])
 
 interface Props {
   open?: boolean
@@ -61,7 +63,7 @@ export default function Sidebar({ open, onClose, role }: Props) {
 
         {/* Nav */}
         <nav className="flex-1 overflow-y-auto py-3 px-2">
-          {NAV.map(item => {
+          {NAV.filter(item => role === 'admin' || STAFF_HREFS.has(item.href)).map(item => {
             const active = isActive(item.href)
             return (
               <Link key={item.href} href={item.href} onClick={onClose}

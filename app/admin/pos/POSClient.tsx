@@ -131,9 +131,9 @@ export default function POSClient({ inventory, staffId, staffName }: Props) {
   }, [cart, amountPaid, total, customer, payMethod, subtotal, discount, changeDue, balanceDue, notes, staffId])
 
   return (
-    <div className="flex flex-col lg:flex-row gap-4 h-full min-h-[calc(100vh-8rem)]">
+    <div className="flex flex-col lg:flex-row gap-4 h-full min-h-[calc(100vh-8rem)] overflow-x-hidden">
       {/* Left: Product Picker */}
-      <div className="lg:flex-1 flex flex-col gap-3">
+      <div className="flex-1 min-w-0 flex flex-col gap-3">
         {/* Search */}
         <div className="relative">
           <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
@@ -174,7 +174,7 @@ export default function POSClient({ inventory, staffId, staffName }: Props) {
       </div>
 
       {/* Right: Cart + Checkout */}
-      <div className="w-full lg:w-96 flex flex-col gap-3" style={{ minWidth: '320px' }}>
+      <div className="w-full lg:w-96 shrink-0 flex flex-col gap-3">
         <div className="rounded-xl flex flex-col flex-1" style={{ background: 'var(--navy)', border: '1px solid #1e2e3c' }}>
           <div className="flex items-center gap-2 px-4 py-3" style={{ borderBottom: '1px solid #1e2e3c' }}>
             <ShoppingCart size={16} style={{ color: 'var(--gold)' }} />

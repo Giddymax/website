@@ -2,15 +2,15 @@ import { createClient } from '@/lib/supabase/server'
 import HeroSlider from '@/components/public/HeroSlider'
 import Link from 'next/link'
 import Image from 'next/image'
-import { CheckCircle, Truck, Package, Star, ChevronDown, Phone, ArrowRight } from 'lucide-react'
+import { CheckCircle, Truck, Package, Star, ChevronDown, Phone, ArrowRight, MapPin, Clock } from 'lucide-react'
 
 const CATEGORIES = [
-  { name: 'Cement & Concrete', slug: 'cement-concrete', icon: '🏗️', img: '/images/WhatsApp Image 2026-06-03 at 17.27.10.jpeg', desc: 'Ghacem bags, concrete mix, aggregates' },
-  { name: 'Steel & Reinforcement', slug: 'steel-reinforcement', icon: '🔩', img: '/images/WhatsApp Image 2026-06-03 at 17.27.00.jpeg', desc: 'Rebar, BRC mesh, binding wire, Star Steels' },
-  { name: 'Roofing Materials', slug: 'roofing-materials', icon: '🏠', img: '/images/WhatsApp Image 2026-06-04 at 00.49.37 (2).jpeg', desc: 'Zinc, aluminium, coloured sheets, fittings' },
-  { name: 'Paint & Finishes', slug: 'paint-finishes', icon: '🎨', img: '/images/WhatsApp Image 2026-06-03 at 17.27.21.jpeg', desc: 'De-Luxy acrylic paint, primers, solvents' },
-  { name: 'Tiles & Flooring', slug: 'tiles-flooring', icon: '🪟', img: '/images/WhatsApp Image 2026-06-03 at 17.27.15.jpeg', desc: 'Ceramic, porcelain floor & wall tiles' },
-  { name: 'Hardware & Tools', slug: 'hardware-fasteners', icon: '🔧', img: '/images/WhatsApp Image 2026-06-04 at 00.49.38.jpeg', desc: 'Nails, screws, hand tools, wheelbarrows' },
+  { name: 'Cement & Concrete', slug: 'cement-concrete', img: '/images/WhatsApp Image 2026-06-03 at 17.27.10.jpeg', desc: 'Ghacem bags, concrete mix, aggregates' },
+  { name: 'Steel & Reinforcement', slug: 'steel-reinforcement', img: '/images/WhatsApp Image 2026-06-03 at 17.27.00.jpeg', desc: 'Rebar, BRC mesh, binding wire, Star Steels' },
+  { name: 'Roofing Materials', slug: 'roofing-materials', img: '/images/WhatsApp Image 2026-06-04 at 00.49.37 (2).jpeg', desc: 'Zinc, aluminium, coloured sheets, fittings' },
+  { name: 'Paint & Finishes', slug: 'paint-finishes', img: '/images/WhatsApp Image 2026-06-03 at 17.27.21.jpeg', desc: 'De-Luxy acrylic paint, primers, solvents' },
+  { name: 'Tiles & Flooring', slug: 'tiles-flooring', img: '/images/WhatsApp Image 2026-06-03 at 17.27.15.jpeg', desc: 'Ceramic, porcelain floor & wall tiles' },
+  { name: 'Hardware & Tools', slug: 'hardware-fasteners', img: '/images/WhatsApp Image 2026-06-04 at 00.49.38.jpeg', desc: 'Nails, screws, hand tools, wheelbarrows' },
 ]
 
 const WHY_REASONS = [
@@ -62,7 +62,6 @@ export default async function HomePage() {
                 <div className="relative h-44 overflow-hidden">
                   <Image src={cat.img} alt={cat.name} fill className="object-cover group-hover:scale-105 transition-transform duration-300" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" />
                   <div className="absolute inset-0" style={{ background: 'linear-gradient(to top, rgba(21,33,44,0.7), transparent)' }} />
-                  <span className="absolute bottom-3 left-3 text-2xl">{cat.icon}</span>
                 </div>
                 <div className="p-4">
                   <h3 className="font-bold text-base mb-1" style={{ color: 'var(--heading-dark)' }}>{cat.name}</h3>
@@ -203,12 +202,12 @@ export default async function HomePage() {
       <section style={{ background: 'var(--navy-deep)' }} className="py-14 sm:py-16">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 grid grid-cols-1 sm:grid-cols-3 gap-8 text-center">
           <div>
-            <div className="text-3xl mb-2">📍</div>
+            <div className="mb-3 flex justify-center"><MapPin size={22} style={{ color: 'var(--gold)' }} /></div>
             <div className="text-white font-bold mb-1">Visit Us</div>
             <div className="text-sm" style={{ color: '#8a9ba8' }}>Opp. Radiance Gas Filling Station, Near Point 3 Hotel, Adeiso, Eastern Region</div>
           </div>
           <div>
-            <div className="text-3xl mb-2">📞</div>
+            <div className="mb-3 flex justify-center"><Phone size={22} style={{ color: 'var(--gold)' }} /></div>
             <div className="text-white font-bold mb-1">Call Us</div>
             <div className="space-y-1">
               {['02444754803', '0249986118', '0240268125'].map(n => (
@@ -217,7 +216,7 @@ export default async function HomePage() {
             </div>
           </div>
           <div>
-            <div className="text-3xl mb-2">⏰</div>
+            <div className="mb-3 flex justify-center"><Clock size={22} style={{ color: 'var(--gold)' }} /></div>
             <div className="text-white font-bold mb-1">Opening Hours</div>
             <div className="text-sm" style={{ color: '#8a9ba8' }}>Mon – Sat: 7am – 6pm<br />Sunday: 9am – 3pm</div>
           </div>
