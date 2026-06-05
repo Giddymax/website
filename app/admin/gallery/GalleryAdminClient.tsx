@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { Plus, Pencil, Trash2, X } from 'lucide-react'
 import toast from 'react-hot-toast'
 import type { GalleryItem } from '@/types/database'
+import ImageUpload from '@/components/admin/ImageUpload'
 
 const EMPTY: Partial<GalleryItem> = { label: '', image_url: '', category: '', sort_order: 1, is_active: true }
 
@@ -83,10 +84,12 @@ export default function GalleryAdminClient({ items: initial }: Props) {
               <button onClick={close} className="text-gray-500 hover:text-white"><X size={18} /></button>
             </div>
             <div className="p-6 space-y-4">
-              <div>
-                <label className="block text-xs font-semibold text-gray-400 mb-1.5">Image URL *</label>
-                <input className="admin-input" value={modal.item.image_url || ''} onChange={e => set('image_url', e.target.value)} placeholder="https://…" />
-              </div>
+              <ImageUpload
+                label="Image *"
+                folder="gallery"
+                value={modal.item.image_url}
+                onChange={url => set('image_url', url ?? '')}
+              />
               <div>
                 <label className="block text-xs font-semibold text-gray-400 mb-1.5">Label</label>
                 <input className="admin-input" value={modal.item.label || ''} onChange={e => set('label', e.target.value)} placeholder="Photo caption" />

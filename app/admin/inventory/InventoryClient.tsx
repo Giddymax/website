@@ -5,11 +5,12 @@ import { formatCurrency, PRODUCT_CATEGORIES, STOCK_UNITS } from '@/lib/utils'
 import { Plus, Pencil, Trash2, Search, AlertTriangle } from 'lucide-react'
 import toast from 'react-hot-toast'
 import type { InventoryItem } from '@/types/database'
+import ImageUpload from '@/components/admin/ImageUpload'
 
 interface Props { items: InventoryItem[] }
 
 const EMPTY: Partial<InventoryItem> = {
-  name: '', category: 'Cement & Concrete', price: 0,
+  name: '', category: 'Cement & Concrete', image_url: null, price: 0,
   unit: 'bag', stock_quantity: 0, low_stock_threshold: 5,
   is_service: false, is_active: true,
 }
@@ -37,23 +38,19 @@ export default function InventoryClient({ items: initialItems }: Props) {
     if (!item.name) { toast.error('Name is required'); return }
     setLoading(true)
     const supabase = createClient()
+    const payload = {
+      name: item.name, category: item.category, image_url: item.image_url || null,
+      price: item.price, unit: item.unit, stock_quantity: item.stock_quantity,
+      low_stock_threshold: item.low_stock_threshold,
+      is_service: item.is_service, is_active: item.is_active,
+    }
     if (item.id) {
-      const { error } = await supabase.from('inventory_items').update({
-        name: item.name, category: item.category, price: item.price,
-        unit: item.unit, stock_quantity: item.stock_quantity,
-        low_stock_threshold: item.low_stock_threshold,
-        is_service: item.is_service, is_active: item.is_active,
-      }).eq('id', item.id)
+      const { error } = await supabase.from('inventory_items').update(payload).eq('id', item.id)
       if (error) { toast.error('Update failed'); setLoading(false); return }
-      setItems(prev => prev.map(i => i.id === item.id ? { ...i, ...item } as InventoryItem : i))
+      setItems(prev => prev.map(i => i.id === item.id ? { ...i, ...payload } as InventoryItem : i))
       toast.success('Updated')
     } else {
-      const { data, error } = await supabase.from('inventory_items').insert([{
-        name: item.name, category: item.category, price: item.price,
-        unit: item.unit, stock_quantity: item.stock_quantity,
-        low_stock_threshold: item.low_stock_threshold,
-        is_service: item.is_service, is_active: item.is_active,
-      }]).select().single()
+      const { data, error } = await supabase.from('inventory_items').insert([payload]).select().single()
       if (error || !data) { toast.error('Create failed'); setLoading(false); return }
       setItems(prev => [...prev, data])
       toast.success('Created')
@@ -141,6 +138,12 @@ export default function InventoryClient({ items: initialItems }: Props) {
                 <label className="block text-xs font-semibold text-gray-400 mb-1.5">Name *</label>
                 <input className="admin-input" value={modal.item.name || ''} onChange={e => set('name', e.target.value)} />
               </div>
+              <ImageUpload
+                label="Image"
+                folder="inventory"
+                value={modal.item.image_url}
+                onChange={url => set('image_url', url)}
+              />
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-semibold text-gray-400 mb-1.5">Category</label>

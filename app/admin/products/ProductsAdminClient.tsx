@@ -5,6 +5,7 @@ import { PRODUCT_CATEGORIES, STOCK_UNITS, slugify } from '@/lib/utils'
 import { Plus, Pencil, Trash2, X } from 'lucide-react'
 import toast from 'react-hot-toast'
 import type { Product } from '@/types/database'
+import ImageUpload from '@/components/admin/ImageUpload'
 
 const EMPTY: Partial<Product> = {
   name: '', slug: '', category: 'Cement & Concrete', description: '',
@@ -119,10 +120,12 @@ export default function ProductsAdminClient({ products: initial }: Props) {
                 <label className="block text-xs font-semibold text-gray-400 mb-1.5">Description</label>
                 <textarea className="admin-input resize-none" rows={3} value={modal.p.description || ''} onChange={e => set('description', e.target.value)} />
               </div>
-              <div>
-                <label className="block text-xs font-semibold text-gray-400 mb-1.5">Image URL</label>
-                <input className="admin-input" value={modal.p.image_url || ''} onChange={e => set('image_url', e.target.value)} placeholder="https://…" />
-              </div>
+              <ImageUpload
+                label="Image"
+                folder="products"
+                value={modal.p.image_url}
+                onChange={url => set('image_url', url)}
+              />
               <div className="grid grid-cols-3 gap-4">
                 <div>
                   <label className="block text-xs font-semibold text-gray-400 mb-1.5">Unit</label>

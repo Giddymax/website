@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase/client'
 import { Plus, Pencil, Trash2, X, GripVertical } from 'lucide-react'
 import toast from 'react-hot-toast'
 import type { HeroSlide } from '@/types/database'
+import ImageUpload from '@/components/admin/ImageUpload'
 
 const EMPTY: Partial<HeroSlide> = {
   title: '', subtitle: '', heading: '', body: '',
@@ -141,10 +142,12 @@ export default function HeroSlidesClient({ slides: initial }: Props) {
                   <input className="admin-input" value={modal.slide.button2_href || ''} onChange={e => set('button2_href', e.target.value)} />
                 </div>
               </div>
-              <div>
-                <label className="block text-xs font-semibold text-gray-400 mb-1.5">Image URL (Supabase storage URL)</label>
-                <input className="admin-input" value={modal.slide.image_url || ''} onChange={e => set('image_url', e.target.value)} placeholder="https://…supabase.co/storage/…" />
-              </div>
+              <ImageUpload
+                label="Background Image"
+                folder="hero"
+                value={modal.slide.image_url}
+                onChange={url => set('image_url', url)}
+              />
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-semibold text-gray-400 mb-1.5">Sort Order</label>

@@ -5,6 +5,7 @@ import { slugify, formatDate } from '@/lib/utils'
 import { Plus, Pencil, Trash2, X } from 'lucide-react'
 import toast from 'react-hot-toast'
 import type { BlogPost, BlogStatus } from '@/types/database'
+import ImageUpload from '@/components/admin/ImageUpload'
 
 const EMPTY: Partial<BlogPost> = {
   title: '', slug: '', category: 'Guides', excerpt: '', content: '',
@@ -123,10 +124,12 @@ export default function BlogAdminClient({ posts: initial }: Props) {
                   </select>
                 </div>
               </div>
-              <div>
-                <label className="block text-xs font-semibold text-gray-400 mb-1.5">Cover Image URL</label>
-                <input className="admin-input" value={modal.p.cover_url || ''} onChange={e => set('cover_url', e.target.value)} placeholder="https://…" />
-              </div>
+              <ImageUpload
+                label="Cover Image"
+                folder="blog"
+                value={modal.p.cover_url}
+                onChange={url => set('cover_url', url)}
+              />
             </div>
             <div className="px-6 py-4 flex gap-3 border-t border-[#1e2e3c]">
               <button onClick={save} disabled={loading} className="btn-gold flex-1 py-2.5 text-sm">{loading ? 'Saving…' : 'Save Post'}</button>
