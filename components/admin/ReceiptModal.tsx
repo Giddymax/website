@@ -27,7 +27,7 @@ export default function ReceiptModal({ sale, items, staffName, onClose }: Props)
         .divider { border-top: 1px dashed #000; margin: 6px 0; }
         .row { display: flex; justify-content: space-between; margin: 2px 0; }
         .logo { font-size: 14px; font-weight: bold; }
-        img { max-width: 60px; display: block; margin: 0 auto 4px; }
+        img { max-width: 100px; display: block; margin: 0 auto 6px; }
         table { width: 100%; border-collapse: collapse; }
         td { vertical-align: top; padding: 1px 0; font-size: 11px; }
       </style></head>
@@ -61,6 +61,8 @@ export default function ReceiptModal({ sale, items, staffName, onClose }: Props)
           <div ref={receiptRef} style={{ fontFamily: "'Courier New', monospace", fontSize: '11px', color: '#000', background: '#fff', padding: '16px', borderRadius: '4px', lineHeight: '1.5' }}>
             {/* Header */}
             <div className="center bold" style={{ textAlign: 'center', marginBottom: '4px' }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/logo.jpeg" alt="K.K. Danny Enterprise" style={{ maxWidth: '100px', height: 'auto', margin: '0 auto 6px', display: 'block' }} />
               <div style={{ fontWeight: 'bold', fontSize: '13px' }}>K.K. DANNY ENTERPRISE</div>
               <div>Quality &amp; Affordable Building Materials</div>
               <div>Adeiso, Eastern Region, Ghana</div>
