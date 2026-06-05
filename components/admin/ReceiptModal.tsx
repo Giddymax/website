@@ -14,21 +14,52 @@ interface Props {
 export default function ReceiptModal({ sale, items, staffName, onClose }: Props) {
   const receiptRef = useRef<HTMLDivElement>(null)
 
-  function openPrintWindow(pageSize: string) {
+  function openPrintWindow(mode: 'thermal' | 'pdf') {
     const content = receiptRef.current?.innerHTML || ''
     const base = window.location.origin
     const win = window.open('', '_blank', 'width=500,height=750')
     if (!win) return
+
+    const thermalCSS = `
+      @page { size: 80mm auto; margin: 2mm; }
+      body {
+        font-family: 'Courier New', monospace;
+        font-size: 10px;
+        line-height: 1.4;
+        margin: 0;
+        padding: 4px;
+        width: 72mm;
+        background: white;
+        color: black;
+      }
+      img { max-width: 80px; display: block; margin: 0 auto 4px; }
+      div { word-break: break-word; }
+    `
+
+    const pdfCSS = `
+      @page { size: A4; margin: 18mm 20mm; }
+      body {
+        font-family: 'Courier New', monospace;
+        font-size: 12px;
+        line-height: 1.6;
+        margin: 0 auto;
+        padding: 0;
+        max-width: 400px;
+        background: white;
+        color: black;
+      }
+      img { max-width: 110px; display: block; margin: 0 auto 8px; }
+    `
+
     win.document.write(`
       <html><head>
-        <title>Receipt ${sale.sale_ref}</title>
+        <title>Receipt — ${sale.sale_ref}</title>
         <base href="${base}/">
         <style>
-          @page { size: ${pageSize}; margin: 10mm; }
-          body { font-family: 'Courier New', monospace; font-size: 12px; margin: 0; padding: 16px; background: white; color: black; }
-          img { max-width: 100px; display: block; margin: 0 auto 6px; }
+          * { box-sizing: border-box; }
+          ${mode === 'thermal' ? thermalCSS : pdfCSS}
           table { width: 100%; border-collapse: collapse; }
-          td { vertical-align: top; padding: 1px 0; font-size: 11px; }
+          td { vertical-align: top; padding: 1px 0; }
         </style>
       </head>
       <body>${content}</body></html>
@@ -38,8 +69,8 @@ export default function ReceiptModal({ sale, items, staffName, onClose }: Props)
     setTimeout(() => { win.print(); win.close() }, 400)
   }
 
-  const printReceipt = () => openPrintWindow('80mm auto')
-  const saveAsPDF = () => openPrintWindow('A4')
+  const printReceipt = () => openPrintWindow('thermal')
+  const saveAsPDF = () => openPrintWindow('pdf')
 
   const date = new Date(sale.created_at)
   const dateStr = date.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' })
