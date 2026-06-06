@@ -5,7 +5,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import {
   LayoutDashboard, ShoppingCart, BarChart3, Package, MessageSquare,
   FileText, Image as ImageIcon, Layers, Link2, Palette,
-  Users, X, ChevronRight, LogOut, Receipt
+  Users, X, ChevronRight, LogOut, Receipt, TrendingUp
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import toast from 'react-hot-toast'
@@ -14,6 +14,7 @@ const NAV = [
   { label: 'Dashboard', href: '/admin', icon: LayoutDashboard },
   { label: 'Point of Sale', href: '/admin/pos', icon: ShoppingCart },
   { label: 'Sales', href: '/admin/sales', icon: BarChart3 },
+  { label: 'Analytics', href: '/admin/analytics', icon: TrendingUp },
   { label: 'Inventory', href: '/admin/inventory', icon: Package },
   { label: 'Invoices', href: '/admin/invoices', icon: Receipt },
   { label: 'Quote Requests', href: '/admin/quotes', icon: MessageSquare },
