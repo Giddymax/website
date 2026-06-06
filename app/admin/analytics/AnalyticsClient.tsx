@@ -11,7 +11,7 @@ type SaleItem = {
   unit_price: number
   line_total: number
   inventory_item_id: string | null
-  inventory_items: { cost_price: number } | null
+  inventory_items: { cost_price: number }[] | null
 }
 
 type Sale = {
@@ -94,7 +94,7 @@ export default function AnalyticsClient({ sales }: Props) {
       custMap.set(custKey, cust)
 
       for (const item of sale.sale_items) {
-        const cost = item.quantity * (item.inventory_items?.cost_price ?? 0)
+        const cost = item.quantity * (item.inventory_items?.[0]?.cost_price ?? 0)
         const profit = item.line_total - cost
         totalCost += cost
         totalItemsSold += item.quantity
