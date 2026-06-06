@@ -95,6 +95,7 @@ CREATE TABLE inventory_items (
   category TEXT NOT NULL,
   image_url TEXT,
   price NUMERIC(12,2) NOT NULL DEFAULT 0,
+  cost_price NUMERIC(12,2) NOT NULL DEFAULT 0,
   unit stock_unit NOT NULL DEFAULT 'piece',
   stock_quantity NUMERIC(12,2) NOT NULL DEFAULT 0,
   low_stock_threshold NUMERIC(12,2) NOT NULL DEFAULT 5,

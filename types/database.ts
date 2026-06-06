@@ -35,6 +35,7 @@ export interface InventoryItem {
   category: string
   image_url: string | null
   price: number
+  cost_price: number
   unit: StockUnit
   stock_quantity: number
   low_stock_threshold: number

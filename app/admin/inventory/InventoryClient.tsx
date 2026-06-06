@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { formatCurrency, PRODUCT_CATEGORIES, STOCK_UNITS } from '@/lib/utils'
-import { Plus, Pencil, Trash2, Search, AlertTriangle } from 'lucide-react'
+import { Plus, Pencil, Trash2, Search, AlertTriangle, TrendingUp } from 'lucide-react'
 import toast from 'react-hot-toast'
 import type { InventoryItem } from '@/types/database'
 import ImageUpload from '@/components/admin/ImageUpload'
@@ -10,9 +10,21 @@ import ImageUpload from '@/components/admin/ImageUpload'
 interface Props { items: InventoryItem[] }
 
 const EMPTY: Partial<InventoryItem> = {
-  name: '', category: 'Cement & Concrete', image_url: null, price: 0,
+  name: '', category: 'Cement & Concrete', image_url: null,
+  price: 0, cost_price: 0,
   unit: 'bag', stock_quantity: 0, low_stock_threshold: 5,
   is_service: false, is_active: true,
+}
+
+function margin(price: number, cost: number) {
+  if (!price || !cost || cost <= 0) return null
+  return ((price - cost) / price) * 100
+}
+
+function marginColor(pct: number) {
+  if (pct >= 30) return 'text-green-400'
+  if (pct >= 15) return 'text-yellow-400'
+  return 'text-red-400'
 }
 
 export default function InventoryClient({ items: initialItems }: Props) {
@@ -40,7 +52,8 @@ export default function InventoryClient({ items: initialItems }: Props) {
     const supabase = createClient()
     const payload = {
       name: item.name, category: item.category, image_url: item.image_url || null,
-      price: item.price, unit: item.unit, stock_quantity: item.stock_quantity,
+      price: item.price, cost_price: item.cost_price ?? 0,
+      unit: item.unit, stock_quantity: item.stock_quantity,
       low_stock_threshold: item.low_stock_threshold,
       is_service: item.is_service, is_active: item.is_active,
     }
@@ -67,6 +80,10 @@ export default function InventoryClient({ items: initialItems }: Props) {
     toast.success('Deleted')
   }
 
+  const { item } = modal
+  const liveMargin = margin(item.price ?? 0, item.cost_price ?? 0)
+  const liveProfit = (item.price ?? 0) - (item.cost_price ?? 0)
+
   return (
     <div className="space-y-4">
       <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between">
@@ -81,47 +98,57 @@ export default function InventoryClient({ items: initialItems }: Props) {
 
       <div className="rounded-xl overflow-hidden" style={{ background: 'var(--navy)', border: '1px solid #1e2e3c' }}>
         <div className="overflow-x-auto">
-          <table className="w-full text-sm min-w-[700px]">
+          <table className="w-full text-sm min-w-[800px]">
             <thead>
               <tr style={{ background: '#0d1821' }}>
-                {['Name', 'Category', 'Price', 'Unit', 'Stock', 'Min', 'Service', 'Active', ''].map(h => (
+                {['Name', 'Category', 'Cost (₵)', 'Price (₵)', 'Margin', 'Unit', 'Stock', 'Min', 'Active', ''].map(h => (
                   <th key={h} className="px-3 py-3 text-left text-[10px] font-semibold uppercase tracking-wider" style={{ color: '#4a6175' }}>{h}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
-              {filtered.map(item => (
-                <tr key={item.id} style={{ borderBottom: '1px solid #0d1821' }} className="hover:bg-white/[0.02]">
-                  <td className="px-3 py-3 text-white font-medium">
-                    {item.name}
-                    {item.stock_quantity <= item.low_stock_threshold && !item.is_service && (
-                      <AlertTriangle size={12} className="inline ml-1 text-red-400" />
-                    )}
-                  </td>
-                  <td className="px-3 py-3 text-gray-400 text-xs">{item.category}</td>
-                  <td className="px-3 py-3 font-bold" style={{ color: 'var(--gold)' }}>{formatCurrency(item.price)}</td>
-                  <td className="px-3 py-3 text-gray-400 text-xs">{item.unit}</td>
-                  <td className="px-3 py-3">
-                    <span className={`font-bold text-sm ${item.stock_quantity <= item.low_stock_threshold && !item.is_service ? 'text-red-400' : 'text-green-400'}`}>
-                      {item.stock_quantity}
-                    </span>
-                  </td>
-                  <td className="px-3 py-3 text-gray-500 text-xs">{item.low_stock_threshold}</td>
-                  <td className="px-3 py-3">
-                    <span className={`text-xs ${item.is_service ? 'text-blue-400' : 'text-gray-600'}`}>{item.is_service ? '✓' : '—'}</span>
-                  </td>
-                  <td className="px-3 py-3">
-                    <span className={`text-xs ${item.is_active ? 'text-green-400' : 'text-gray-600'}`}>{item.is_active ? '✓' : '✗'}</span>
-                  </td>
-                  <td className="px-3 py-3">
-                    <div className="flex gap-2">
-                      <button onClick={() => openEdit(item)} className="text-gray-400 hover:text-white"><Pencil size={13} /></button>
-                      <button onClick={() => deleteItem(item.id)} className="text-gray-600 hover:text-red-400"><Trash2 size={13} /></button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-              {filtered.length === 0 && <tr><td colSpan={9} className="px-4 py-10 text-center text-gray-500">No items found</td></tr>}
+              {filtered.map(item => {
+                const m = margin(item.price, item.cost_price)
+                return (
+                  <tr key={item.id} style={{ borderBottom: '1px solid #0d1821' }} className="hover:bg-white/[0.02]">
+                    <td className="px-3 py-3 text-white font-medium">
+                      {item.name}
+                      {item.stock_quantity <= item.low_stock_threshold && !item.is_service && (
+                        <AlertTriangle size={12} className="inline ml-1 text-red-400" />
+                      )}
+                    </td>
+                    <td className="px-3 py-3 text-gray-400 text-xs">{item.category}</td>
+                    <td className="px-3 py-3 text-gray-400 text-xs">
+                      {item.cost_price > 0 ? formatCurrency(item.cost_price) : <span className="text-gray-600">—</span>}
+                    </td>
+                    <td className="px-3 py-3 font-bold" style={{ color: 'var(--gold)' }}>{formatCurrency(item.price)}</td>
+                    <td className="px-3 py-3">
+                      {m !== null ? (
+                        <span className={`text-xs font-bold ${marginColor(m)}`}>{m.toFixed(1)}%</span>
+                      ) : (
+                        <span className="text-gray-600 text-xs">—</span>
+                      )}
+                    </td>
+                    <td className="px-3 py-3 text-gray-400 text-xs">{item.unit}</td>
+                    <td className="px-3 py-3">
+                      <span className={`font-bold text-sm ${item.stock_quantity <= item.low_stock_threshold && !item.is_service ? 'text-red-400' : 'text-green-400'}`}>
+                        {item.stock_quantity}
+                      </span>
+                    </td>
+                    <td className="px-3 py-3 text-gray-500 text-xs">{item.low_stock_threshold}</td>
+                    <td className="px-3 py-3">
+                      <span className={`text-xs ${item.is_active ? 'text-green-400' : 'text-gray-600'}`}>{item.is_active ? '✓' : '✗'}</span>
+                    </td>
+                    <td className="px-3 py-3">
+                      <div className="flex gap-2">
+                        <button type="button" aria-label="Edit item" onClick={() => openEdit(item)} className="text-gray-400 hover:text-white"><Pencil size={13} /></button>
+                        <button type="button" aria-label="Delete item" onClick={() => deleteItem(item.id)} className="text-gray-600 hover:text-red-400"><Trash2 size={13} /></button>
+                      </div>
+                    </td>
+                  </tr>
+                )
+              })}
+              {filtered.length === 0 && <tr><td colSpan={10} className="px-4 py-10 text-center text-gray-500">No items found</td></tr>}
             </tbody>
           </table>
         </div>
@@ -131,54 +158,92 @@ export default function InventoryClient({ items: initialItems }: Props) {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70">
           <div className="w-full max-w-lg rounded-xl" style={{ background: 'var(--navy)', border: '1px solid #1e2e3c' }}>
             <div className="px-6 py-4 border-b border-[#1e2e3c]">
-              <h2 className="text-white font-bold">{modal.item.id ? 'Edit Item' : 'Add Item'}</h2>
+              <h2 className="text-white font-bold">{item.id ? 'Edit Item' : 'Add Item'}</h2>
             </div>
             <div className="p-6 space-y-4 overflow-y-auto max-h-[70vh]">
               <div>
                 <label className="block text-xs font-semibold text-gray-400 mb-1.5">Name *</label>
-                <input className="admin-input" value={modal.item.name || ''} onChange={e => set('name', e.target.value)} />
+                <input className="admin-input" value={item.name || ''} onChange={e => set('name', e.target.value)} />
               </div>
               <ImageUpload
                 label="Image"
                 folder="inventory"
-                value={modal.item.image_url}
+                value={item.image_url}
                 onChange={url => set('image_url', url)}
               />
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-semibold text-gray-400 mb-1.5">Category</label>
-                  <select className="admin-select" value={modal.item.category || ''} onChange={e => set('category', e.target.value)}>
+                  <select className="admin-select" value={item.category || ''} onChange={e => set('category', e.target.value)}>
                     {PRODUCT_CATEGORIES.map(c => <option key={c}>{c}</option>)}
                   </select>
                 </div>
                 <div>
                   <label className="block text-xs font-semibold text-gray-400 mb-1.5">Unit</label>
-                  <select className="admin-select" value={modal.item.unit || 'piece'} onChange={e => set('unit', e.target.value)}>
+                  <select className="admin-select" value={item.unit || 'piece'} onChange={e => set('unit', e.target.value)}>
                     {STOCK_UNITS.map(u => <option key={u}>{u}</option>)}
                   </select>
                 </div>
               </div>
-              <div className="grid grid-cols-3 gap-3">
+
+              {/* Pricing */}
+              <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-semibold text-gray-400 mb-1.5">Price (₵)</label>
-                  <input type="number" className="admin-input" value={modal.item.price || ''} onChange={e => set('price', Number(e.target.value))} min={0} step="0.01" />
+                  <label className="block text-xs font-semibold text-gray-400 mb-1.5">Cost Price (₵)</label>
+                  <input type="number" className="admin-input" value={item.cost_price ?? ''} onChange={e => set('cost_price', Number(e.target.value))} min={0} step="0.01" placeholder="0.00" />
                 </div>
                 <div>
+                  <label className="block text-xs font-semibold text-gray-400 mb-1.5">Selling Price (₵)</label>
+                  <input type="number" className="admin-input" value={item.price ?? ''} onChange={e => set('price', Number(e.target.value))} min={0} step="0.01" placeholder="0.00" />
+                </div>
+              </div>
+
+              {/* Live margin panel */}
+              {(item.cost_price ?? 0) > 0 && (item.price ?? 0) > 0 && (
+                <div className="rounded-lg p-3 flex items-center gap-4" style={{ background: '#0d1821', border: '1px solid #1e2e3c' }}>
+                  <TrendingUp size={16} style={{ color: liveMargin !== null && liveMargin >= 0 ? 'var(--gold)' : '#f87171' }} className="shrink-0" />
+                  <div className="flex gap-6 flex-wrap text-xs">
+                    <div>
+                      <span className="text-gray-500">Profit / unit</span>
+                      <div className={`font-bold ${liveProfit >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                        {liveProfit >= 0 ? '+' : ''}{formatCurrency(liveProfit)}
+                      </div>
+                    </div>
+                    <div>
+                      <span className="text-gray-500">Gross margin</span>
+                      <div className={`font-bold ${liveMargin !== null ? marginColor(liveMargin) : 'text-gray-400'}`}>
+                        {liveMargin !== null ? `${liveMargin.toFixed(1)}%` : '—'}
+                      </div>
+                    </div>
+                    <div>
+                      <span className="text-gray-500">Markup</span>
+                      <div className="font-bold text-gray-300">
+                        {(item.cost_price ?? 0) > 0
+                          ? `${(((item.price ?? 0) - (item.cost_price ?? 0)) / (item.cost_price ?? 1) * 100).toFixed(1)}%`
+                          : '—'}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
                   <label className="block text-xs font-semibold text-gray-400 mb-1.5">Stock Qty</label>
-                  <input type="number" className="admin-input" value={modal.item.stock_quantity ?? ''} onChange={e => set('stock_quantity', Number(e.target.value))} min={0} />
+                  <input type="number" className="admin-input" value={item.stock_quantity ?? ''} onChange={e => set('stock_quantity', Number(e.target.value))} min={0} />
                 </div>
                 <div>
                   <label className="block text-xs font-semibold text-gray-400 mb-1.5">Low Stock Alert</label>
-                  <input type="number" className="admin-input" value={modal.item.low_stock_threshold ?? ''} onChange={e => set('low_stock_threshold', Number(e.target.value))} min={0} />
+                  <input type="number" className="admin-input" value={item.low_stock_threshold ?? ''} onChange={e => set('low_stock_threshold', Number(e.target.value))} min={0} />
                 </div>
               </div>
               <div className="flex gap-4">
                 <label className="flex items-center gap-2 text-sm text-gray-300 cursor-pointer">
-                  <input type="checkbox" checked={!!modal.item.is_service} onChange={e => set('is_service', e.target.checked)} className="accent-yellow-500" />
+                  <input type="checkbox" checked={!!item.is_service} onChange={e => set('is_service', e.target.checked)} className="accent-yellow-500" />
                   Is a Service
                 </label>
                 <label className="flex items-center gap-2 text-sm text-gray-300 cursor-pointer">
-                  <input type="checkbox" checked={!!modal.item.is_active} onChange={e => set('is_active', e.target.checked)} className="accent-yellow-500" />
+                  <input type="checkbox" checked={!!item.is_active} onChange={e => set('is_active', e.target.checked)} className="accent-yellow-500" />
                   Active
                 </label>
               </div>
