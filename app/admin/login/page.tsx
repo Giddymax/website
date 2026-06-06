@@ -78,9 +78,6 @@ export default function LoginPage() {
               {loading ? 'Signing in…' : <><LogIn size={16} /> Sign In</>}
             </button>
           </form>
-          <div className="mt-6 p-4 rounded-lg text-xs leading-relaxed" style={{ background: '#0d1821', border: '1px solid #1e2e3c', color: '#4a6175' }}>
-            <strong style={{ color: '#8a9ba8' }}>First-time setup:</strong> Create your admin account in Supabase Auth, then run the seed SQL to populate data. See <code>DEPLOYMENT.md</code> for full instructions.
-          </div>
         </div>
         <p className="text-center mt-6 text-xs" style={{ color: '#3a4d5e' }}>
           © 2025 K.K. Danny Enterprise · Staff only
