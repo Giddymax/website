@@ -65,7 +65,7 @@ export default async function Footer() {
         <div className="sm:col-span-2 lg:col-span-1">
           <Link href="/" className="flex items-center gap-3 mb-4">
             <div className="w-12 h-12 rounded overflow-hidden ring-2 ring-yellow-500/30">
-              <Image src="/logo.jpeg" alt="K.K. Danny Enterprise" width={192} height={192} quality={100} sizes="48px" className="object-cover w-full h-full" />
+              <Image src="/logo.png" alt="K.K. Danny Enterprise" width={192} height={192} quality={100} sizes="48px" className="object-cover w-full h-full" />
             </div>
             <div>
               <div className="text-white font-extrabold text-sm leading-tight">K.K. DANNY ENTERPRISE</div>

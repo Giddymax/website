@@ -88,7 +88,7 @@ export default function InvoicePrintModal({ invoice, createdByName, onClose }: P
                 <tr>
                   <td style={{ verticalAlign: 'top', width: '50%' }}>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src="/logo.jpeg" alt="K.K. Danny Enterprise" style={{ maxWidth: '70px', height: 'auto', marginBottom: '6px' }} />
+                    <img src="/logo.png" alt="K.K. Danny Enterprise" style={{ maxWidth: '70px', height: 'auto', marginBottom: '6px' }} />
                     <div style={{ fontWeight: 'bold', fontSize: '14px' }}>K.K. DANNY ENTERPRISE</div>
                     <div style={{ color: '#6b7280', fontSize: '11px' }}>Quality &amp; Affordable Building Materials</div>
                     <div style={{ color: '#6b7280', fontSize: '11px' }}>Adeiso, Eastern Region, Ghana</div>

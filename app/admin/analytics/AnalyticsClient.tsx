@@ -174,7 +174,7 @@ export default function AnalyticsClient({ sales }: Props) {
     </head><body>
       <table style="width:100%;margin-bottom:16px;border:none"><tbody><tr>
         <td style="vertical-align:top;border:none;padding:0">
-          <img src="/logo.jpeg" style="max-width:56px;height:auto;margin-bottom:6px;display:block" />
+          <img src="/logo.png" style="max-width:56px;height:auto;margin-bottom:6px;display:block" />
           <div style="font-weight:bold;font-size:16px">K.K. DANNY ENTERPRISE</div>
           <div style="color:#6b7280;font-size:11px">Business Analytics Report</div>
         </td>

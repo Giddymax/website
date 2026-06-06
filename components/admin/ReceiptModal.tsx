@@ -96,7 +96,7 @@ export default function ReceiptModal({ sale, items, staffName, onClose }: Props)
             {/* Header */}
             <div className="center bold" style={{ textAlign: 'center', marginBottom: '4px' }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/logo.jpeg" alt="K.K. Danny Enterprise" style={{ maxWidth: '100px', height: 'auto', margin: '0 auto 6px', display: 'block' }} />
+              <img src="/logo.png" alt="K.K. Danny Enterprise" style={{ maxWidth: '100px', height: 'auto', margin: '0 auto 6px', display: 'block' }} />
               <div style={{ fontWeight: 'bold', fontSize: '13px' }}>K.K. DANNY ENTERPRISE</div>
               <div>Quality &amp; Affordable Building Materials</div>
               <div>Adeiso, Eastern Region, Ghana</div>

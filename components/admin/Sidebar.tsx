@@ -60,7 +60,7 @@ export default function Sidebar({ open, onClose, role }: Props) {
         <div className="flex items-center justify-between p-4" style={{ borderBottom: '1px solid #1e2e3c' }}>
           <Link href="/" className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded overflow-hidden ring-1 ring-yellow-500/30 shrink-0">
-              <Image src="/logo.jpeg" alt="KK Danny" width={128} height={128} quality={100} sizes="32px" className="object-cover w-full h-full" />
+              <Image src="/logo.png" alt="KK Danny" width={128} height={128} quality={100} sizes="32px" className="object-cover w-full h-full" />
             </div>
             <div>
               <div className="text-white font-bold text-xs leading-tight">K.K. DANNY</div>

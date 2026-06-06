@@ -34,7 +34,7 @@ export default function LoginPage() {
         {/* Logo Block */}
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl overflow-hidden mb-4 ring-2 ring-yellow-500/30">
-            <Image src="/logo.jpeg" alt="K.K. Danny Enterprise" width={320} height={320} quality={100} sizes="80px" className="object-cover w-full h-full" />
+            <Image src="/logo.png" alt="K.K. Danny Enterprise" width={320} height={320} quality={100} sizes="80px" className="object-cover w-full h-full" />
           </div>
           <div className="text-white font-extrabold text-lg tracking-wide">K.K. DANNY ENTERPRISE</div>
           <div className="text-xs tracking-widest uppercase mt-1" style={{ color: 'var(--text-muted)' }}>Staff & Admin Portal</div>
