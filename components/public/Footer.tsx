@@ -1,7 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Phone, MapPin, Mail, Facebook, Instagram, Youtube, Linkedin, Twitter } from 'lucide-react'
+import { Phone, MapPin, Mail, Facebook, Instagram, Youtube, Linkedin, Twitter, Settings } from 'lucide-react'
 
 const QUICK_LINKS = [
   { label: 'Home', href: '/' },
@@ -148,7 +148,7 @@ export default async function Footer() {
           <div className="flex gap-4">
             <Link href="/contact" className="hover:text-white transition-colors">Privacy</Link>
             <Link href="/contact" className="hover:text-white transition-colors">Terms</Link>
-            <Link href="/admin/login" className="hover:text-white transition-colors">Staff Login</Link>
+            <Link href="/admin/login" className="hover:text-white transition-colors" aria-label="Staff login"><Settings size={13} /></Link>
           </div>
         </div>
       </div>
