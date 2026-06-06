@@ -146,8 +146,8 @@ export default async function Footer() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs" style={{ color: '#4a6175' }}>
           <span>{copyright}</span>
           <div className="flex gap-4">
-            <Link href="/contact" className="hover:text-white transition-colors">Privacy</Link>
-            <Link href="/contact" className="hover:text-white transition-colors">Terms</Link>
+            <Link href="/privacy" className="hover:text-white transition-colors">Privacy</Link>
+            <Link href="/terms" className="hover:text-white transition-colors">Terms</Link>
             <Link href="/admin/login" className="hover:text-white transition-colors" aria-label="Staff login"><Settings size={13} /></Link>
           </div>
         </div>
