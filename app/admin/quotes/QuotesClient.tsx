@@ -18,10 +18,18 @@ const STATUSES: QuoteStatus[] = ['new', 'reviewed', 'quoted', 'completed', 'canc
 
 interface Props { quotes: QuoteRequest[]; role: string }
 
-type EditForm = Pick<QuoteRequest,
-  'name' | 'phone' | 'email' | 'project_type' | 'materials_needed' |
-  'quantity_volume' | 'delivery_address' | 'deadline' | 'notes' | 'status'
->
+type EditForm = {
+  name: string
+  phone: string
+  email: string
+  project_type: string
+  materials_needed: string
+  quantity_volume: string
+  delivery_address: string
+  deadline: string
+  notes: string
+  status: QuoteStatus
+}
 
 function formFromQuote(q: QuoteRequest): EditForm {
   return {
@@ -116,7 +124,7 @@ export default function QuotesClient({ quotes: initialQuotes, role }: Props) {
           <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
           <input className="admin-input pl-9" placeholder="Search by name, phone, email…" value={search} onChange={e => setSearch(e.target.value)} />
         </div>
-        <select className="admin-select sm:w-44" value={statusFilter} onChange={e => setStatusFilter(e.target.value)}>
+        <select aria-label="Filter by status" className="admin-select sm:w-44" value={statusFilter} onChange={e => setStatusFilter(e.target.value)}>
           <option value="all">All Statuses</option>
           {STATUSES.map(s => (
             <option key={s} value={s}>{s.charAt(0).toUpperCase() + s.slice(1)}</option>
@@ -217,7 +225,7 @@ export default function QuotesClient({ quotes: initialQuotes, role }: Props) {
               ) : null)}
               <div className="flex gap-3 items-center">
                 <span className="text-gray-500 w-36 shrink-0">Status</span>
-                <select className="admin-select flex-1" value={detail.status} onChange={e => updateStatus(detail.id, e.target.value as QuoteStatus)}>
+                <select aria-label="Quote status" className="admin-select flex-1" value={detail.status} onChange={e => updateStatus(detail.id, e.target.value as QuoteStatus)}>
                   {STATUSES.map(s => (
                     <option key={s} value={s}>{s.charAt(0).toUpperCase() + s.slice(1)}</option>
                   ))}
