@@ -30,7 +30,7 @@ const PRODUCT_LINKS = [
   { label: 'Delivery Service', href: '/delivery' },
 ]
 
-export default function Navbar({ phone = '02444754803', tagline = 'Building Materials & Services' }: NavbarProps) {
+export default function Navbar({ phone = '0244754803', tagline = 'Building Materials & Services' }: NavbarProps) {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [productsOpen, setProductsOpen] = useState(false)

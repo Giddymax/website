@@ -92,7 +92,7 @@ export default function InvoicePrintModal({ invoice, createdByName, onClose }: P
                     <div style={{ fontWeight: 'bold', fontSize: '14px' }}>K.K. DANNY ENTERPRISE</div>
                     <div style={{ color: '#6b7280', fontSize: '11px' }}>Quality &amp; Affordable Building Materials</div>
                     <div style={{ color: '#6b7280', fontSize: '11px' }}>Adeiso, Eastern Region, Ghana</div>
-                    <div style={{ color: '#6b7280', fontSize: '11px' }}>Tel: 02444754803 / 0249986118</div>
+                    <div style={{ color: '#6b7280', fontSize: '11px' }}>Tel: 0244754803 / 0249986118</div>
                   </td>
                   <td style={{ verticalAlign: 'top', textAlign: 'right' }}>
                     <div style={{ fontSize: '22px', fontWeight: 'bold', letterSpacing: '-0.5px' }}>INVOICE</div>
@@ -187,7 +187,7 @@ export default function InvoicePrintModal({ invoice, createdByName, onClose }: P
             {/* Footer */}
             <div style={{ borderTop: '1px solid #e5e7eb', paddingTop: '12px', textAlign: 'center', fontSize: '11px', color: '#6b7280' }}>
               <div>Thank you for your business!</div>
-              <div>K.K. Danny Enterprise · Adeiso, Eastern Region, Ghana · Tel: 02444754803</div>
+              <div>K.K. Danny Enterprise · Adeiso, Eastern Region, Ghana · Tel: 0244754803</div>
               {createdByName && <div style={{ marginTop: '4px' }}>Prepared by: {createdByName}</div>}
             </div>
           </div>

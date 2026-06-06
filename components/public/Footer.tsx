@@ -52,7 +52,7 @@ export default async function Footer() {
   const c = (key: string, fallback = '') =>
     siteContent?.find(x => x.key === key)?.value || fallback
 
-  const phones = [c('phone1', '02444754803'), c('phone2', '0249986118'), c('phone3', '0240268125')].filter(Boolean)
+  const phones = [c('phone1', '0244754803'), c('phone2', '0249986118'), c('phone3', '0240268125')].filter(Boolean)
   const address = c('address', 'Opp. Radiance Gas Filling Station, Near Point 3 Hotel, Adeiso, Eastern Region, Ghana')
   const email = c('email', 'info@kkdannyenterprise.com')
   const tagline = c('footer_tagline', "Adeiso's most reliable source for cement, steel, roofing, paint, tiles, timber, tools, and more.")

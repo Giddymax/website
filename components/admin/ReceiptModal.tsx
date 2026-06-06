@@ -100,7 +100,7 @@ export default function ReceiptModal({ sale, items, staffName, onClose }: Props)
               <div style={{ fontWeight: 'bold', fontSize: '13px' }}>K.K. DANNY ENTERPRISE</div>
               <div>Quality &amp; Affordable Building Materials</div>
               <div>Adeiso, Eastern Region, Ghana</div>
-              <div>Tel: 02444754803 / 0249986118</div>
+              <div>Tel: 0244754803 / 0249986118</div>
               <div>Opp. Radiance Gas Filling Station</div>
             </div>
             <div style={{ borderTop: '1px dashed #000', margin: '6px 0' }} />

@@ -19,7 +19,7 @@ export default async function ContactPage() {
     siteContent?.find(x => x.key === key)?.value || fallback
 
   const phones = [
-    c('phone1', '02444754803'),
+    c('phone1', '0244754803'),
     c('phone2', '0249986118'),
     c('phone3', '0240268125'),
   ].filter(Boolean)

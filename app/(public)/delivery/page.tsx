@@ -63,7 +63,7 @@ export default function DeliveryPage() {
             ))}
           </div>
           <p className="mt-6 text-sm text-center" style={{ color: 'var(--text-muted)' }}>
-            For deliveries outside these areas, please call us for a custom quote: <a href="tel:+233244754803" className="font-bold" style={{ color: 'var(--gold)' }}>02444754803</a>
+            For deliveries outside these areas, please call us for a custom quote: <a href="tel:+233244754803" className="font-bold" style={{ color: 'var(--gold)' }}>0244754803</a>
           </p>
         </div>
       </section>

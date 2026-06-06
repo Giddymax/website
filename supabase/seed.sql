@@ -79,7 +79,7 @@ INSERT INTO site_content (key, value, section) VALUES
 ('tagline', 'Quality & Affordable Building Materials', 'general'),
 ('sub_tagline', 'Your First Stop For Building Materials', 'general'),
 ('address', 'Opp. Radiance Gas Filling Station, Near Point 3 Hotel, Adeiso, Eastern Region, Ghana', 'contact'),
-('phone1', '02444754803', 'contact'),
+('phone1', '0244754803', 'contact'),
 ('phone2', '0249986118', 'contact'),
 ('phone3', '0240268125', 'contact'),
 ('email', 'info@kkdannyenterprise.com', 'contact'),
@@ -99,7 +99,7 @@ INSERT INTO site_content (key, value, section) VALUES
 ('why4_body', 'Years of service to the Adeiso community. Contractors and home builders count on us for every project stage.', 'why'),
 -- FAQ
 ('faq1_q', 'Do you offer delivery to sites outside Adeiso?', 'faq'),
-('faq1_a', 'Yes, we deliver to Adeiso and nearby communities. For longer distances, please contact us for a custom quote. Call 02444754803 to arrange.', 'faq'),
+('faq1_a', 'Yes, we deliver to Adeiso and nearby communities. For longer distances, please contact us for a custom quote. Call 0244754803 to arrange.', 'faq'),
 ('faq2_q', 'Can I get a formal written quote for my project?', 'faq'),
 ('faq2_a', 'Absolutely. Fill in the online quote form or call us and a staff member will prepare a detailed price list for your materials list.', 'faq'),
 ('faq3_q', 'Do you sell single bags of cement or in bulk only?', 'faq'),
@@ -109,7 +109,7 @@ INSERT INTO site_content (key, value, section) VALUES
 ('faq5_q', 'Do you accept Mobile Money payment?', 'faq'),
 ('faq5_a', 'Yes. We accept cash, Mobile Money (MTN MoMo, AirtelTigo Money, Telecel Cash), and bank transfer.', 'faq'),
 -- Header / Navbar
-('header_phone', '02444754803', 'header'),
+('header_phone', '0244754803', 'header'),
 ('header_tagline', 'Building Materials & Services', 'header'),
 -- Footer
 ('footer_tagline', 'Adeiso''s most reliable source for cement, steel, roofing, paint, tiles, timber, tools, and more.', 'footer'),

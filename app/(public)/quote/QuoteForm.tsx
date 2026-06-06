@@ -35,7 +35,7 @@ export default function QuoteForm() {
         <div className="text-5xl mb-4">✅</div>
         <h2 className="text-2xl font-extrabold mb-3" style={{ color: 'var(--heading-dark)' }}>Request Received!</h2>
         <p className="mb-2" style={{ color: 'var(--text-muted)' }}>Thank you, <strong>{form.name}</strong>. We&apos;ll prepare your quote and contact you on <strong>{form.phone}</strong> shortly.</p>
-        <p className="text-sm" style={{ color: 'var(--text-muted)' }}>For urgent requests, call us directly on <a href="tel:+233244754803" className="font-bold" style={{ color: 'var(--gold)' }}>02444754803</a>.</p>
+        <p className="text-sm" style={{ color: 'var(--text-muted)' }}>For urgent requests, call us directly on <a href="tel:+233244754803" className="font-bold" style={{ color: 'var(--gold)' }}>0244754803</a>.</p>
       </div>
     )
   }
@@ -52,7 +52,7 @@ export default function QuoteForm() {
         </div>
         <div>
           <label className="block text-sm font-semibold mb-1.5" style={{ color: 'var(--heading-dark)' }}>Phone Number *</label>
-          <input type="tel" className={inputCls} style={inputStyle} value={form.phone} onChange={set('phone')} placeholder="e.g. 02444754803" required />
+          <input type="tel" className={inputCls} style={inputStyle} value={form.phone} onChange={set('phone')} placeholder="e.g. 0244754803" required />
         </div>
       </div>
       <div>
@@ -101,7 +101,7 @@ export default function QuoteForm() {
         {loading ? 'Submitting…' : <><Send size={16} /> Submit Quote Request</>}
       </button>
       <p className="text-xs text-center" style={{ color: 'var(--text-muted)' }}>
-        Or call us directly: <a href="tel:+233244754803" className="font-bold" style={{ color: 'var(--gold)' }}>02444754803</a>
+        Or call us directly: <a href="tel:+233244754803" className="font-bold" style={{ color: 'var(--gold)' }}>0244754803</a>
       </p>
     </form>
   )

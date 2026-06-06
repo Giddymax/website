@@ -74,7 +74,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
             <p className="text-lg mb-2" style={{ color: 'var(--text-muted)' }}>No products listed yet for this category.</p>
             <p className="text-sm mb-6" style={{ color: 'var(--text-muted)' }}>We carry a wide range — call us for availability and pricing.</p>
             <div className="flex gap-3 justify-center">
-              <a href="tel:+233244754803" className="btn-gold">Call 02444754803</a>
+              <a href="tel:+233244754803" className="btn-gold">Call 0244754803</a>
               <Link href="/quote" className="btn-outline-gold">Request a Quote</Link>
             </div>
           </div>

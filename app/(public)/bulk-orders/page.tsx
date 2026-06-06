@@ -42,7 +42,7 @@ export default function BulkOrdersPage() {
           </p>
           <div className="flex flex-wrap gap-3 justify-center">
             <Link href="/quote" className="btn-gold">Request Bulk Quote</Link>
-            <a href="tel:+233244754803" className="btn-outline-gold">Call 02444754803</a>
+            <a href="tel:+233244754803" className="btn-outline-gold">Call 0244754803</a>
           </div>
         </div>
       </section>
