@@ -1,4 +1,5 @@
 export type UserRole = 'admin' | 'staff'
+export type InvoiceStatus = 'draft' | 'sent' | 'paid' | 'cancelled'
 export type SaleStatus = 'completed' | 'partial' | 'cancelled'
 export type PaymentMethod = 'cash' | 'mobile_money' | 'bank_transfer' | 'card'
 export type QuoteStatus = 'new' | 'reviewed' | 'quoted' | 'completed' | 'cancelled'
@@ -137,6 +138,36 @@ export interface QuoteRequest {
   status: QuoteStatus
   created_at: string
   updated_at: string
+}
+
+export interface Invoice {
+  id: string
+  invoice_number: string
+  customer_name: string
+  customer_phone: string | null
+  customer_email: string | null
+  customer_address: string | null
+  status: InvoiceStatus
+  due_date: string | null
+  notes: string | null
+  created_by: string | null
+  subtotal: number
+  discount: number
+  total: number
+  created_at: string
+  updated_at: string
+  invoice_items?: InvoiceItem[]
+  profiles?: Pick<Profile, 'full_name' | 'email'>
+}
+
+export interface InvoiceItem {
+  id: string
+  invoice_id: string
+  description: string
+  quantity: number
+  unit: string
+  unit_price: number
+  line_total: number
 }
 
 export interface ThemeColor {

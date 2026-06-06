@@ -9,6 +9,7 @@ const PAGE_TITLES: Record<string, string> = {
   '/admin/pos': 'Point of Sale',
   '/admin/sales': 'Sales',
   '/admin/inventory': 'Inventory',
+  '/admin/invoices': 'Invoices',
   '/admin/quotes': 'Quote Requests',
   '/admin/content': 'Content Management',
   '/admin/hero-slides': 'Hero Slides',

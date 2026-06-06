@@ -5,7 +5,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import {
   LayoutDashboard, ShoppingCart, BarChart3, Package, MessageSquare,
   FileText, Image as ImageIcon, Layers, Link2, Palette,
-  Users, X, ChevronRight, LogOut
+  Users, X, ChevronRight, LogOut, Receipt
 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import toast from 'react-hot-toast'
@@ -15,6 +15,7 @@ const NAV = [
   { label: 'Point of Sale', href: '/admin/pos', icon: ShoppingCart },
   { label: 'Sales', href: '/admin/sales', icon: BarChart3 },
   { label: 'Inventory', href: '/admin/inventory', icon: Package },
+  { label: 'Invoices', href: '/admin/invoices', icon: Receipt },
   { label: 'Quote Requests', href: '/admin/quotes', icon: MessageSquare },
   { label: 'Content', href: '/admin/content', icon: FileText },
   { label: 'Hero Slides', href: '/admin/hero-slides', icon: Layers },
@@ -25,7 +26,7 @@ const NAV = [
   { label: 'Staff', href: '/admin/staff', icon: Users },
 ]
 
-const STAFF_HREFS = new Set(['/admin/pos', '/admin/sales', '/admin/inventory', '/admin/quotes'])
+const STAFF_HREFS = new Set(['/admin/pos', '/admin/sales', '/admin/inventory', '/admin/quotes', '/admin/invoices'])
 
 interface Props {
   open?: boolean
@@ -58,7 +59,7 @@ export default function Sidebar({ open, onClose, role }: Props) {
         <div className="flex items-center justify-between p-4" style={{ borderBottom: '1px solid #1e2e3c' }}>
           <Link href="/" className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded overflow-hidden ring-1 ring-yellow-500/30 shrink-0">
-              <Image src="/logo.jpeg" alt="KK Danny" width={32} height={32} className="object-cover w-full h-full" />
+              <Image src="/logo.jpeg" alt="KK Danny" width={128} height={128} quality={100} sizes="32px" className="object-cover w-full h-full" />
             </div>
             <div>
               <div className="text-white font-bold text-xs leading-tight">K.K. DANNY</div>
