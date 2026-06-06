@@ -3,13 +3,14 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { formatCurrency, formatDate, generateInvoiceRef } from '@/lib/utils'
-import { Plus, Pencil, Trash2, Search, Printer, Eye, X, PlusCircle, MinusCircle } from 'lucide-react'
+import { Plus, Pencil, Trash2, Search, Printer, X, PlusCircle, MinusCircle } from 'lucide-react'
 import toast from 'react-hot-toast'
-import type { Invoice, InvoiceItem, InvoiceStatus } from '@/types/database'
+import type { Invoice, InvoiceItem, InvoiceStatus, InventoryItem } from '@/types/database'
 import InvoicePrintModal from './InvoicePrintModal'
 
 interface Props {
   invoices: Invoice[]
+  inventoryItems: Pick<InventoryItem, 'id' | 'name' | 'price' | 'unit' | 'category'>[]
   currentUserId: string
   currentUserName: string
   role: string
@@ -23,6 +24,8 @@ const STATUS_STYLES: Record<InvoiceStatus, string> = {
   paid: 'bg-green-900/50 text-green-300',
   cancelled: 'bg-red-900/50 text-red-400',
 }
+
+const UNITS = ['piece', 'bag', 'sheet', 'roll', 'tin', 'kg', 'metre', 'bundle', 'set', 'lot']
 
 const EMPTY_ITEM = (): DraftItem => ({
   _key: Math.random().toString(36).slice(2),
@@ -76,7 +79,11 @@ function formFromInvoice(inv: Invoice): FormState {
   }
 }
 
-export default function InvoicesClient({ invoices: initial, currentUserId, currentUserName, role }: Props) {
+function numVal(val: number): string | number {
+  return val === 0 ? '' : val
+}
+
+export default function InvoicesClient({ invoices: initial, inventoryItems, currentUserId, currentUserName, role }: Props) {
   const router = useRouter()
   const [invoices, setInvoices] = useState(initial)
   const [search, setSearch] = useState('')
@@ -102,19 +109,29 @@ export default function InvoicesClient({ invoices: initial, currentUserId, curre
   const setF = (k: keyof FormState, v: unknown) =>
     setModal(m => ({ ...m, form: { ...m.form, [k]: v } }))
 
-  const setItem = (key: string, k: keyof DraftItem, v: unknown) =>
+  const updateItem = (key: string, patch: Partial<DraftItem>) =>
     setModal(m => ({
       ...m,
       form: {
         ...m.form,
         items: m.form.items.map(it => {
           if (it._key !== key) return it
-          const updated = { ...it, [k]: v }
-          updated.line_total = Number((updated.quantity * updated.unit_price).toFixed(2))
-          return updated
+          const merged = { ...it, ...patch }
+          merged.line_total = Number((merged.quantity * merged.unit_price).toFixed(2))
+          return merged
         }),
       },
     }))
+
+  const pickInventoryItem = (itemKey: string, invId: string) => {
+    const inv = inventoryItems.find(i => i.id === invId)
+    if (!inv) return
+    updateItem(itemKey, {
+      description: inv.name,
+      unit: inv.unit,
+      unit_price: inv.price,
+    })
+  }
 
   const addItem = () =>
     setModal(m => ({ ...m, form: { ...m.form, items: [...m.form.items, EMPTY_ITEM()] } }))
@@ -128,7 +145,7 @@ export default function InvoicesClient({ invoices: initial, currentUserId, curre
 
   async function save() {
     if (!form.customer_name.trim()) { toast.error('Customer name is required'); return }
-    if (form.items.length === 0 || form.items.every(it => !it.description.trim())) {
+    if (form.items.every(it => !it.description.trim())) {
       toast.error('Add at least one line item'); return
     }
     setSaving(true)
@@ -154,7 +171,6 @@ export default function InvoicesClient({ invoices: initial, currentUserId, curre
     if (modal.editId) {
       const { error } = await supabase.from('invoices').update(invoicePayload).eq('id', modal.editId)
       if (error) { toast.error('Update failed: ' + error.message); setSaving(false); return }
-
       await supabase.from('invoice_items').delete().eq('invoice_id', modal.editId)
       await supabase.from('invoice_items').insert(
         validItems.map(it => ({
@@ -171,7 +187,6 @@ export default function InvoicesClient({ invoices: initial, currentUserId, curre
       const { data: newInv, error } = await supabase
         .from('invoices').insert([invoicePayload]).select().single()
       if (error || !newInv) { toast.error('Create failed: ' + (error?.message || '')); setSaving(false); return }
-
       await supabase.from('invoice_items').insert(
         validItems.map(it => ({
           invoice_id: newInv.id,
@@ -207,8 +222,6 @@ export default function InvoicesClient({ invoices: initial, currentUserId, curre
     toast.success('Status updated')
   }
 
-  const handlePrint = (inv: Invoice) => setPrintInvoice(inv)
-
   return (
     <div className="space-y-4">
       {/* Toolbar */}
@@ -224,6 +237,7 @@ export default function InvoicesClient({ invoices: initial, currentUserId, curre
             />
           </div>
           <select
+            aria-label="Filter by status"
             className="admin-select w-36"
             value={statusFilter}
             onChange={e => setStatusFilter(e.target.value as typeof statusFilter)}
@@ -235,7 +249,7 @@ export default function InvoicesClient({ invoices: initial, currentUserId, curre
             <option value="cancelled">Cancelled</option>
           </select>
         </div>
-        <button onClick={openCreate} className="btn-gold flex items-center gap-2 text-sm px-5 py-2.5 shrink-0">
+        <button type="button" onClick={openCreate} className="btn-gold flex items-center gap-2 text-sm px-5 py-2.5 shrink-0">
           <Plus size={15} /> New Invoice
         </button>
       </div>
@@ -260,10 +274,13 @@ export default function InvoicesClient({ invoices: initial, currentUserId, curre
                     {inv.customer_phone && <div className="text-gray-500 text-xs">{inv.customer_phone}</div>}
                   </td>
                   <td className="px-4 py-3 text-gray-400 text-xs">{formatDate(inv.created_at)}</td>
-                  <td className="px-4 py-3 text-gray-400 text-xs">{inv.due_date ? formatDate(inv.due_date) : <span className="text-gray-600">—</span>}</td>
+                  <td className="px-4 py-3 text-gray-400 text-xs">
+                    {inv.due_date ? formatDate(inv.due_date) : <span className="text-gray-600">—</span>}
+                  </td>
                   <td className="px-4 py-3 font-bold" style={{ color: 'var(--gold)' }}>{formatCurrency(inv.total)}</td>
                   <td className="px-4 py-3">
                     <select
+                      aria-label="Invoice status"
                       value={inv.status}
                       onChange={e => updateStatus(inv.id, e.target.value as InvoiceStatus)}
                       className={`text-xs font-semibold px-2 py-1 rounded border-0 outline-none cursor-pointer ${STATUS_STYLES[inv.status]}`}
@@ -275,16 +292,19 @@ export default function InvoicesClient({ invoices: initial, currentUserId, curre
                     </select>
                   </td>
                   <td className="px-4 py-3">
-                    <div className="flex gap-2 items-center">
-                      <button type="button" aria-label="Print invoice" onClick={() => handlePrint(inv)} className="text-gray-400 hover:text-white">
-                        <Printer size={14} />
+                    <div className="flex gap-1 items-center">
+                      <button type="button" aria-label="Print invoice" onClick={() => setPrintInvoice(inv)}
+                        className="flex items-center gap-1 px-2 py-1 rounded text-xs text-gray-400 hover:text-white hover:bg-white/10 transition-colors">
+                        <Printer size={13} /> Print
                       </button>
-                      <button type="button" aria-label="Edit invoice" onClick={() => openEdit(inv)} className="text-gray-400 hover:text-white">
-                        <Pencil size={13} />
+                      <button type="button" aria-label="Edit invoice" onClick={() => openEdit(inv)}
+                        className="flex items-center gap-1 px-2 py-1 rounded text-xs text-gray-400 hover:text-white hover:bg-white/10 transition-colors">
+                        <Pencil size={13} /> Edit
                       </button>
                       {role === 'admin' && (
-                        <button type="button" aria-label="Delete invoice" onClick={() => deleteInvoice(inv.id)} className="text-gray-600 hover:text-red-400">
-                          <Trash2 size={13} />
+                        <button type="button" aria-label="Delete invoice" onClick={() => deleteInvoice(inv.id)}
+                          className="flex items-center gap-1 px-2 py-1 rounded text-xs text-gray-600 hover:text-red-400 hover:bg-red-900/20 transition-colors">
+                          <Trash2 size={13} /> Delete
                         </button>
                       )}
                     </div>
@@ -303,25 +323,24 @@ export default function InvoicesClient({ invoices: initial, currentUserId, curre
       {modal.open && (
         <div className="fixed inset-0 z-50 flex items-start justify-center p-4 bg-black/75 overflow-y-auto">
           <div className="w-full max-w-2xl rounded-xl my-4" style={{ background: 'var(--navy)', border: '1px solid #1e2e3c' }}>
-            {/* Header */}
             <div className="flex items-center justify-between px-6 py-4" style={{ borderBottom: '1px solid #1e2e3c' }}>
               <div>
                 <h2 className="text-white font-bold">{modal.editId ? 'Edit Invoice' : 'New Invoice'}</h2>
                 <div className="text-xs text-gray-500 mt-0.5">{form.invoice_number}</div>
               </div>
-              <button type="button" onClick={closeModal} className="text-gray-500 hover:text-white"><X size={18} /></button>
+              <button type="button" aria-label="Close" onClick={closeModal} className="text-gray-500 hover:text-white"><X size={18} /></button>
             </div>
 
             <div className="p-6 space-y-6">
               {/* Invoice meta */}
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-gray-400 mb-1.5">Invoice #</label>
-                  <input className="admin-input font-mono text-xs" value={form.invoice_number} onChange={e => setF('invoice_number', e.target.value)} />
+                  <label htmlFor="inv-num" className="block text-xs font-semibold text-gray-400 mb-1.5">Invoice #</label>
+                  <input id="inv-num" className="admin-input font-mono text-xs" value={form.invoice_number} onChange={e => setF('invoice_number', e.target.value)} />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-gray-400 mb-1.5">Status</label>
-                  <select className="admin-select" value={form.status} onChange={e => setF('status', e.target.value)}>
+                  <label htmlFor="inv-status" className="block text-xs font-semibold text-gray-400 mb-1.5">Status</label>
+                  <select id="inv-status" aria-label="Invoice status" className="admin-select" value={form.status} onChange={e => setF('status', e.target.value)}>
                     <option value="draft">Draft</option>
                     <option value="sent">Sent</option>
                     <option value="paid">Paid</option>
@@ -335,20 +354,20 @@ export default function InvoicesClient({ invoices: initial, currentUserId, curre
                 <h3 className="text-xs font-bold uppercase tracking-wider mb-3" style={{ color: 'var(--gold)' }}>Customer Details</h3>
                 <div className="grid grid-cols-2 gap-3">
                   <div className="col-span-2">
-                    <label className="block text-xs font-semibold text-gray-400 mb-1.5">Customer Name *</label>
-                    <input className="admin-input" placeholder="John Mensah" value={form.customer_name} onChange={e => setF('customer_name', e.target.value)} />
+                    <label htmlFor="inv-cust" className="block text-xs font-semibold text-gray-400 mb-1.5">Customer Name *</label>
+                    <input id="inv-cust" className="admin-input" placeholder="John Mensah" value={form.customer_name} onChange={e => setF('customer_name', e.target.value)} />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-gray-400 mb-1.5">Phone</label>
-                    <input className="admin-input" placeholder="024XXXXXXX" value={form.customer_phone} onChange={e => setF('customer_phone', e.target.value)} />
+                    <label htmlFor="inv-phone" className="block text-xs font-semibold text-gray-400 mb-1.5">Phone</label>
+                    <input id="inv-phone" className="admin-input" placeholder="024XXXXXXX" value={form.customer_phone} onChange={e => setF('customer_phone', e.target.value)} />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-gray-400 mb-1.5">Email</label>
-                    <input type="email" className="admin-input" placeholder="customer@email.com" value={form.customer_email} onChange={e => setF('customer_email', e.target.value)} />
+                    <label htmlFor="inv-email" className="block text-xs font-semibold text-gray-400 mb-1.5">Email</label>
+                    <input id="inv-email" type="email" className="admin-input" placeholder="customer@email.com" value={form.customer_email} onChange={e => setF('customer_email', e.target.value)} />
                   </div>
                   <div className="col-span-2">
-                    <label className="block text-xs font-semibold text-gray-400 mb-1.5">Delivery / Site Address</label>
-                    <input className="admin-input" placeholder="Site or delivery address" value={form.customer_address} onChange={e => setF('customer_address', e.target.value)} />
+                    <label htmlFor="inv-addr" className="block text-xs font-semibold text-gray-400 mb-1.5">Delivery / Site Address</label>
+                    <input id="inv-addr" className="admin-input" placeholder="Site or delivery address" value={form.customer_address} onChange={e => setF('customer_address', e.target.value)} />
                   </div>
                 </div>
               </div>
@@ -362,59 +381,93 @@ export default function InvoicesClient({ invoices: initial, currentUserId, curre
                   </button>
                 </div>
 
-                {/* Column headers */}
-                <div className="grid grid-cols-12 gap-2 mb-1 px-1">
-                  {['Description', 'Qty', 'Unit', 'Price (₵)', 'Total', ''].map((h, i) => (
-                    <div key={i} className={`text-[10px] font-semibold uppercase tracking-wider text-gray-500 ${i === 0 ? 'col-span-4' : i === 4 ? 'col-span-2' : i === 5 ? 'col-span-1' : 'col-span-1'}`}>{h}</div>
-                  ))}
-                </div>
-
-                <div className="space-y-2">
-                  {form.items.map(it => (
-                    <div key={it._key} className="grid grid-cols-12 gap-2 items-center">
-                      <input
-                        className="admin-input text-xs col-span-4"
-                        placeholder="Item or service description"
-                        value={it.description}
-                        onChange={e => setItem(it._key, 'description', e.target.value)}
-                      />
-                      <input
-                        type="number"
-                        className="admin-input text-xs col-span-1"
-                        value={it.quantity}
-                        min={0}
-                        step="0.01"
-                        onChange={e => setItem(it._key, 'quantity', Number(e.target.value))}
-                      />
-                      <select
-                        className="admin-select text-xs col-span-2"
-                        value={it.unit}
-                        onChange={e => setItem(it._key, 'unit', e.target.value)}
-                      >
-                        {['piece', 'bag', 'sheet', 'roll', 'tin', 'kg', 'metre', 'bundle', 'set', 'lot'].map(u => (
-                          <option key={u}>{u}</option>
-                        ))}
-                      </select>
-                      <input
-                        type="number"
-                        className="admin-input text-xs col-span-2"
-                        value={it.unit_price}
-                        min={0}
-                        step="0.01"
-                        onChange={e => setItem(it._key, 'unit_price', Number(e.target.value))}
-                      />
-                      <div className="col-span-2 text-xs font-semibold text-right pr-1" style={{ color: 'var(--gold)' }}>
-                        {formatCurrency(it.line_total)}
+                <div className="space-y-3">
+                  {form.items.map((it, idx) => (
+                    <div key={it._key} className="rounded-lg p-3 space-y-2" style={{ background: '#0d1821', border: '1px solid #1e2e3c' }}>
+                      {/* Row 1: inventory select + description + remove */}
+                      <div className="flex gap-2 items-start">
+                        <div className="flex-1 space-y-1.5">
+                          <select
+                            aria-label="Select from inventory"
+                            className="admin-select text-xs w-full"
+                            defaultValue=""
+                            onChange={e => pickInventoryItem(it._key, e.target.value)}
+                          >
+                            <option value="">— Select from inventory —</option>
+                            {inventoryItems.map(inv => (
+                              <option key={inv.id} value={inv.id}>
+                                {inv.name} · {formatCurrency(inv.price)}/{inv.unit}
+                              </option>
+                            ))}
+                          </select>
+                          <input
+                            className="admin-input text-xs w-full"
+                            placeholder={`Item ${idx + 1} description`}
+                            value={it.description}
+                            onChange={e => updateItem(it._key, { description: e.target.value })}
+                          />
+                        </div>
+                        <button
+                          type="button"
+                          aria-label="Remove item"
+                          onClick={() => removeItem(it._key)}
+                          disabled={form.items.length === 1}
+                          className="text-gray-600 hover:text-red-400 disabled:opacity-30 mt-1 shrink-0"
+                        >
+                          <MinusCircle size={16} />
+                        </button>
                       </div>
-                      <button
-                        type="button"
-                        aria-label="Remove item"
-                        onClick={() => removeItem(it._key)}
-                        disabled={form.items.length === 1}
-                        className="col-span-1 text-gray-600 hover:text-red-400 disabled:opacity-30 flex justify-center"
-                      >
-                        <MinusCircle size={14} />
-                      </button>
+
+                      {/* Row 2: qty, unit, price, total */}
+                      <div className="grid grid-cols-4 gap-2">
+                        <div>
+                          <label className="block text-[10px] text-gray-500 mb-1">Qty</label>
+                          <input
+                            type="number"
+                            className="admin-input text-xs"
+                            placeholder="1"
+                            value={numVal(it.quantity)}
+                            min={0}
+                            step="any"
+                            onChange={e => {
+                              const n = e.target.value === '' ? 0 : parseFloat(e.target.value)
+                              updateItem(it._key, { quantity: isNaN(n) ? 0 : n })
+                            }}
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[10px] text-gray-500 mb-1">Unit</label>
+                          <select
+                            aria-label="Unit"
+                            className="admin-select text-xs"
+                            value={it.unit}
+                            onChange={e => updateItem(it._key, { unit: e.target.value })}
+                          >
+                            {UNITS.map(u => <option key={u}>{u}</option>)}
+                          </select>
+                        </div>
+                        <div>
+                          <label className="block text-[10px] text-gray-500 mb-1">Price (₵)</label>
+                          <input
+                            type="number"
+                            className="admin-input text-xs"
+                            placeholder="0.00"
+                            value={numVal(it.unit_price)}
+                            min={0}
+                            step="any"
+                            onChange={e => {
+                              const n = e.target.value === '' ? 0 : parseFloat(e.target.value)
+                              updateItem(it._key, { unit_price: isNaN(n) ? 0 : n })
+                            }}
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[10px] text-gray-500 mb-1">Total</label>
+                          <div className="text-sm font-bold pt-1.5" style={{ color: 'var(--gold)' }}>
+                            {formatCurrency(it.line_total)}
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -424,12 +477,13 @@ export default function InvoicesClient({ invoices: initial, currentUserId, curre
               <div className="grid grid-cols-2 gap-6">
                 <div className="space-y-3">
                   <div>
-                    <label className="block text-xs font-semibold text-gray-400 mb-1.5">Due Date</label>
-                    <input type="date" className="admin-input text-xs" value={form.due_date} onChange={e => setF('due_date', e.target.value)} />
+                    <label htmlFor="inv-due" className="block text-xs font-semibold text-gray-400 mb-1.5">Due Date</label>
+                    <input id="inv-due" type="date" className="admin-input text-xs" value={form.due_date} onChange={e => setF('due_date', e.target.value)} />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-gray-400 mb-1.5">Notes / Terms</label>
+                    <label htmlFor="inv-notes" className="block text-xs font-semibold text-gray-400 mb-1.5">Notes / Terms</label>
                     <textarea
+                      id="inv-notes"
                       className="admin-input resize-none text-xs"
                       rows={3}
                       placeholder="Payment terms, delivery notes…"
@@ -443,27 +497,31 @@ export default function InvoicesClient({ invoices: initial, currentUserId, curre
                   <div className="flex justify-between text-sm text-gray-400">
                     <span>Subtotal</span><span>{formatCurrency(subtotal)}</span>
                   </div>
-                  <div className="flex justify-between items-center text-sm text-gray-400">
-                    <span>Discount (₵)</span>
+                  <div className="flex justify-between items-center text-sm text-gray-400 gap-3">
+                    <span className="shrink-0">Discount (₵)</span>
                     <input
                       type="number"
+                      aria-label="Discount amount"
                       className="admin-input text-xs w-28 text-right"
-                      value={form.discount}
+                      placeholder="0.00"
+                      value={numVal(form.discount)}
                       min={0}
-                      step="0.01"
-                      onChange={e => setF('discount', Number(e.target.value))}
+                      step="any"
+                      onChange={e => {
+                        const n = e.target.value === '' ? 0 : parseFloat(e.target.value)
+                        setF('discount', isNaN(n) ? 0 : n)
+                      }}
                     />
                   </div>
-                  <div style={{ borderTop: '1px solid #1e2e3c', paddingTop: '8px' }} className="flex justify-between font-bold text-white">
+                  <div className="flex justify-between font-bold text-white" style={{ borderTop: '1px solid #1e2e3c', paddingTop: '8px' }}>
                     <span>Total</span><span style={{ color: 'var(--gold)' }}>{formatCurrency(total)}</span>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Footer */}
             <div className="px-6 py-4 flex gap-3" style={{ borderTop: '1px solid #1e2e3c' }}>
-              <button onClick={save} disabled={saving} className="btn-gold flex-1 py-2.5 text-sm">
+              <button type="button" onClick={save} disabled={saving} className="btn-gold flex-1 py-2.5 text-sm">
                 {saving ? 'Saving…' : modal.editId ? 'Update Invoice' : 'Create Invoice'}
               </button>
               <button type="button" onClick={closeModal} className="flex-1 py-2.5 text-sm rounded font-semibold text-gray-300 hover:text-white" style={{ background: '#1e2a35', border: '1px solid #374d5e' }}>
@@ -474,7 +532,6 @@ export default function InvoicesClient({ invoices: initial, currentUserId, curre
         </div>
       )}
 
-      {/* Print modal */}
       {printInvoice && (
         <InvoicePrintModal
           invoice={printInvoice}
