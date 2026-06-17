@@ -81,8 +81,9 @@ export default function InventoryClient({ items: initialItems }: Props) {
   }
 
   const { item } = modal
-  const liveMargin = margin(item.price ?? 0, item.cost_price ?? 0)
-  const liveProfit = (item.price ?? 0) - (item.cost_price ?? 0)
+  const liveCost = (item.cost_price ?? 0) || (item.price ?? 0)
+  const liveMargin = margin(item.price ?? 0, liveCost)
+  const liveProfit = (item.price ?? 0) - liveCost
 
   return (
     <div className="space-y-4">
@@ -108,7 +109,8 @@ export default function InventoryClient({ items: initialItems }: Props) {
             </thead>
             <tbody>
               {filtered.map(item => {
-                const m = margin(item.price, item.cost_price)
+                const ec = item.cost_price || item.price
+                const m = margin(item.price, ec)
                 return (
                   <tr key={item.id} style={{ borderBottom: '1px solid #0d1821' }} className="hover:bg-white/[0.02]">
                     <td className="px-3 py-3 text-white font-medium">
@@ -119,7 +121,7 @@ export default function InventoryClient({ items: initialItems }: Props) {
                     </td>
                     <td className="px-3 py-3 text-gray-400 text-xs">{item.category}</td>
                     <td className="px-3 py-3 text-gray-400 text-xs">
-                      {item.cost_price > 0 ? formatCurrency(item.cost_price) : <span className="text-gray-600">—</span>}
+                      {item.cost_price > 0 ? formatCurrency(item.cost_price) : <span className="text-gray-500 italic">{formatCurrency(item.price)}</span>}
                     </td>
                     <td className="px-3 py-3 font-bold" style={{ color: 'var(--gold)' }}>{formatCurrency(item.price)}</td>
                     <td className="px-3 py-3">
@@ -199,7 +201,7 @@ export default function InventoryClient({ items: initialItems }: Props) {
               </div>
 
               {/* Live margin panel */}
-              {(item.cost_price ?? 0) > 0 && (item.price ?? 0) > 0 && (
+              {(item.price ?? 0) > 0 && (
                 <div className="rounded-lg p-3 flex items-center gap-4" style={{ background: '#0d1821', border: '1px solid #1e2e3c' }}>
                   <TrendingUp size={16} style={{ color: liveMargin !== null && liveMargin >= 0 ? 'var(--gold)' : '#f87171' }} className="shrink-0" />
                   <div className="flex gap-6 flex-wrap text-xs">
@@ -218,8 +220,8 @@ export default function InventoryClient({ items: initialItems }: Props) {
                     <div>
                       <span className="text-gray-500">Markup</span>
                       <div className="font-bold text-gray-300">
-                        {(item.cost_price ?? 0) > 0
-                          ? `${(((item.price ?? 0) - (item.cost_price ?? 0)) / (item.cost_price ?? 1) * 100).toFixed(1)}%`
+                        {liveCost > 0
+                          ? `${(((item.price ?? 0) - liveCost) / liveCost * 100).toFixed(1)}%`
                           : '—'}
                       </div>
                     </div>

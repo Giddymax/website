@@ -94,7 +94,8 @@ export default function AnalyticsClient({ sales }: Props) {
       custMap.set(custKey, cust)
 
       for (const item of sale.sale_items) {
-        const cost = item.quantity * (item.inventory_items?.[0]?.cost_price ?? 0)
+        const costPrice = item.inventory_items?.[0]?.cost_price || item.unit_price
+        const cost = item.quantity * costPrice
         const profit = item.line_total - cost
         totalCost += cost
         totalItemsSold += item.quantity
@@ -425,7 +426,7 @@ export default function AnalyticsClient({ sales }: Props) {
 
       {/* Footer note */}
       <p className="text-[10px] text-gray-600 text-center pb-2">
-        Profit calculations use current inventory cost prices. Items sold without a cost price set show ₵0.00 cost.
+        Profit calculations use current inventory cost prices. Items without a cost price default to their selling price (0% margin).
       </p>
     </div>
   )
