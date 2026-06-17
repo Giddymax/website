@@ -45,18 +45,21 @@ export default async function AdminDashboard() {
     })
   }
 
+  const collectedRevenue = totalRevenue - totalOutstandingBalance
+
   const STATS = [
-    { label: 'Total Revenue', value: formatCurrency(totalRevenue), icon: TrendingUp, color: '#C8960C', bg: 'rgba(200,150,12,0.1)', href: null },
-    { label: 'Total Sales', value: String(totalSales), icon: BarChart3, color: '#4ade80', bg: 'rgba(74,222,128,0.1)', href: null },
-    { label: 'Pending Quotes', value: String(pendingCount), icon: MessageSquare, color: '#60a5fa', bg: 'rgba(96,165,250,0.1)', href: null },
-    { label: 'Low Stock Items', value: String(lowStockCount), icon: AlertTriangle, color: '#f87171', bg: 'rgba(248,113,113,0.1)', href: null },
-    { label: 'Outstanding Balances', value: formatCurrency(totalOutstandingBalance), icon: Wallet, color: '#fb923c', bg: 'rgba(251,146,60,0.1)', href: '/admin/sales?status=partial' },
+    { label: 'Total Revenue', value: formatCurrency(totalRevenue), icon: TrendingUp, color: '#C8960C', bg: 'rgba(200,150,12,0.1)', href: null, sub: null },
+    { label: 'Collected Revenue', value: formatCurrency(collectedRevenue), icon: Wallet, color: '#4ade80', bg: 'rgba(74,222,128,0.1)', href: null, sub: totalOutstandingBalance > 0 ? `${formatCurrency(totalOutstandingBalance)} unsettled` : null },
+    { label: 'Total Sales', value: String(totalSales), icon: BarChart3, color: '#4ade80', bg: 'rgba(74,222,128,0.1)', href: null, sub: null },
+    { label: 'Pending Quotes', value: String(pendingCount), icon: MessageSquare, color: '#60a5fa', bg: 'rgba(96,165,250,0.1)', href: null, sub: null },
+    { label: 'Low Stock Items', value: String(lowStockCount), icon: AlertTriangle, color: '#f87171', bg: 'rgba(248,113,113,0.1)', href: null, sub: null },
+    { label: 'Outstanding Balances', value: formatCurrency(totalOutstandingBalance), icon: Wallet, color: '#fb923c', bg: 'rgba(251,146,60,0.1)', href: '/admin/sales?status=partial', sub: null },
   ]
 
   return (
     <div className="space-y-6">
       {/* Stat Cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
         {STATS.map(s => {
           const inner = (
             <>
@@ -67,6 +70,7 @@ export default async function AdminDashboard() {
                 </div>
               </div>
               <div className="text-2xl font-extrabold text-white">{s.value}</div>
+              {s.sub && <div className="text-[10px] mt-0.5" style={{ color: '#fb923c' }}>{s.sub}</div>}
             </>
           )
           return s.href ? (

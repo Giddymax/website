@@ -17,7 +17,7 @@ export default async function AnalyticsPage() {
     .from('sales')
     .select(`
       id, sale_ref, customer_name, customer_phone,
-      total, subtotal, discount, status, created_at,
+      total, subtotal, discount, balance_due, status, created_at,
       sale_items (
         id, item_name, quantity, unit, unit_price, line_total, inventory_item_id,
         inventory_items ( cost_price )

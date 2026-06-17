@@ -22,6 +22,7 @@ type Sale = {
   total: number
   subtotal: number
   discount: number
+  balance_due: number
   status: string
   created_at: string
   sale_items: SaleItem[]
@@ -80,12 +81,14 @@ export default function AnalyticsClient({ sales }: Props) {
 
     let totalRevenue = 0
     let totalCost = 0
+    let totalUnsettled = 0
     let totalItemsSold = 0
     const itemMap = new Map<string, { name: string; qty: number; revenue: number; cost: number; profit: number }>()
     const custMap = new Map<string, { name: string; count: number; spend: number; phone: string }>()
 
     for (const sale of filtered) {
       totalRevenue += sale.total
+      totalUnsettled += sale.balance_due ?? 0
 
       const custKey = sale.customer_name?.trim() || 'Walk-in'
       const cust = custMap.get(custKey) ?? { name: custKey, count: 0, spend: 0, phone: sale.customer_phone || '' }
@@ -109,6 +112,7 @@ export default function AnalyticsClient({ sales }: Props) {
       }
     }
 
+    const collectedRevenue = totalRevenue - totalUnsettled
     const totalProfit = totalRevenue - totalCost
     const margin = totalRevenue > 0 ? (totalProfit / totalRevenue) * 100 : 0
     const items = Array.from(itemMap.values())
@@ -118,6 +122,8 @@ export default function AnalyticsClient({ sales }: Props) {
       filtered,
       stats: {
         totalRevenue,
+        collectedRevenue,
+        totalUnsettled,
         totalCost,
         totalProfit,
         margin,
@@ -188,6 +194,7 @@ export default function AnalyticsClient({ sales }: Props) {
 
       <div class="cards">
         <div class="card"><div class="card-label">Total Revenue</div><div class="card-value">${formatCurrency(stats.totalRevenue)}</div></div>
+        <div class="card"><div class="card-label">Collected Revenue</div><div class="card-value profit-pos">${formatCurrency(stats.collectedRevenue)}</div>${stats.totalUnsettled > 0 ? `<div style="font-size:9px;color:#991b1b;margin-top:2px">${formatCurrency(stats.totalUnsettled)} unsettled</div>` : ''}</div>
         <div class="card"><div class="card-label">Cost of Goods</div><div class="card-value">${formatCurrency(stats.totalCost)}</div></div>
         <div class="card"><div class="card-label">Gross Profit</div><div class="card-value ${stats.totalProfit >= 0 ? 'profit-pos' : 'profit-neg'}">${formatCurrency(stats.totalProfit)}</div></div>
         <div class="card"><div class="card-label">Profit Margin</div><div class="card-value">${stats.margin.toFixed(1)}%</div></div>
@@ -278,9 +285,10 @@ export default function AnalyticsClient({ sales }: Props) {
       )}
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
         {[
           { label: 'Revenue', value: formatCurrency(stats.totalRevenue), icon: DollarSign, color: 'var(--gold)' },
+          { label: 'Collected', value: formatCurrency(stats.collectedRevenue), icon: DollarSign, color: '#4ade80', sub: stats.totalUnsettled > 0 ? `${formatCurrency(stats.totalUnsettled)} unsettled` : undefined },
           { label: 'Cost of Goods', value: formatCurrency(stats.totalCost), icon: Package, color: '#94a3b8' },
           { label: 'Gross Profit', value: formatCurrency(stats.totalProfit), icon: TrendingUp, color: stats.totalProfit >= 0 ? '#4ade80' : '#f87171' },
           { label: 'Profit Margin', value: `${stats.margin.toFixed(1)}%`, icon: BarChart2, color: stats.margin >= 20 ? '#4ade80' : stats.margin >= 10 ? '#fbbf24' : '#f87171' },
@@ -293,6 +301,7 @@ export default function AnalyticsClient({ sales }: Props) {
               <span className="text-[10px] uppercase tracking-wider font-semibold" style={{ color: '#4a6175' }}>{card.label}</span>
             </div>
             <div className="text-lg font-extrabold text-white">{card.value}</div>
+            {'sub' in card && card.sub && <div className="text-[10px] text-red-400 mt-0.5">{card.sub}</div>}
           </div>
         ))}
       </div>

@@ -192,11 +192,11 @@ export default function InventoryClient({ items: initialItems }: Props) {
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-semibold text-gray-400 mb-1.5">Cost Price (₵)</label>
-                  <input type="number" className="admin-input" value={item.cost_price ?? ''} onChange={e => set('cost_price', Number(e.target.value))} min={0} step="0.01" placeholder="0.00" />
+                  <input type="number" className="admin-input" value={item.cost_price || ''} onChange={e => set('cost_price', e.target.value === '' ? 0 : Number(e.target.value))} min={0} step="0.01" placeholder="0.00" />
                 </div>
                 <div>
                   <label className="block text-xs font-semibold text-gray-400 mb-1.5">Selling Price (₵)</label>
-                  <input type="number" className="admin-input" value={item.price ?? ''} onChange={e => set('price', Number(e.target.value))} min={0} step="0.01" placeholder="0.00" />
+                  <input type="number" className="admin-input" value={item.price || ''} onChange={e => set('price', e.target.value === '' ? 0 : Number(e.target.value))} min={0} step="0.01" placeholder="0.00" />
                 </div>
               </div>
 
@@ -232,11 +232,11 @@ export default function InventoryClient({ items: initialItems }: Props) {
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="block text-xs font-semibold text-gray-400 mb-1.5">Stock Qty</label>
-                  <input type="number" className="admin-input" value={item.stock_quantity ?? ''} onChange={e => set('stock_quantity', Number(e.target.value))} min={0} />
+                  <input type="number" className="admin-input" value={item.stock_quantity || ''} onChange={e => set('stock_quantity', e.target.value === '' ? 0 : Number(e.target.value))} min={0} placeholder="0" />
                 </div>
                 <div>
                   <label className="block text-xs font-semibold text-gray-400 mb-1.5">Low Stock Alert</label>
-                  <input type="number" className="admin-input" value={item.low_stock_threshold ?? ''} onChange={e => set('low_stock_threshold', Number(e.target.value))} min={0} />
+                  <input type="number" className="admin-input" value={item.low_stock_threshold || ''} onChange={e => set('low_stock_threshold', e.target.value === '' ? 0 : Number(e.target.value))} min={0} placeholder="0" />
                 </div>
               </div>
               <div className="flex gap-4">
