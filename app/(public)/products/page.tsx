@@ -3,6 +3,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowRight } from 'lucide-react'
 import type { Metadata } from 'next'
+import PageHero from '@/components/public/PageHero'
 
 export const metadata: Metadata = {
   title: 'Products | K.K. Danny Enterprise',
@@ -29,15 +30,12 @@ export default async function ProductsPage() {
 
   return (
     <>
-      <div style={{ background: 'var(--navy)' }} className="py-14 sm:py-20">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
-          <span className="section-label">Everything You Need</span>
-          <h1 className="text-3xl sm:text-5xl font-extrabold text-white mt-3 mb-4">Our Products</h1>
-          <p className="text-base max-w-xl mx-auto" style={{ color: '#8a9ba8' }}>
-            From foundations to finishes — fully stocked building materials for every project stage.
-          </p>
-        </div>
-      </div>
+      <PageHero
+        slug="products"
+        defaultLabel="Everything You Need"
+        defaultHeading="Our Products"
+        defaultDescription="From foundations to finishes — fully stocked building materials for every project stage."
+      />
 
       {/* Category Grid */}
       <section className="py-14 sm:py-20" style={{ background: 'var(--surface)' }}>

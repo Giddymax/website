@@ -2,6 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import type { Metadata } from 'next'
 import { CheckCircle, Truck } from 'lucide-react'
+import PageHero from '@/components/public/PageHero'
 
 export const metadata: Metadata = {
   title: 'Delivery Service | K.K. Danny Enterprise',
@@ -11,15 +12,12 @@ export const metadata: Metadata = {
 export default function DeliveryPage() {
   return (
     <>
-      <div style={{ background: 'var(--navy)' }} className="py-14 sm:py-20">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
-          <span className="section-label">Fast & Reliable</span>
-          <h1 className="text-3xl sm:text-5xl font-extrabold text-white mt-3 mb-4">Delivery Service</h1>
-          <p className="text-base max-w-xl mx-auto" style={{ color: '#8a9ba8' }}>
-            Same-day delivery of building materials to your construction site in Adeiso and surrounding communities.
-          </p>
-        </div>
-      </div>
+      <PageHero
+        slug="delivery"
+        defaultLabel="Fast & Reliable"
+        defaultHeading="Delivery Service"
+        defaultDescription="Same-day delivery of building materials to your construction site in Adeiso and surrounding communities."
+      />
       <section className="py-14 sm:py-20 max-w-5xl mx-auto px-4 sm:px-6 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         <div>
           <span className="section-label">How It Works</span>

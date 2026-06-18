@@ -209,6 +209,24 @@ CREATE TABLE social_links (
 );
 
 -- ============================================================
+-- PAGE HEROES (sub-page header banners)
+-- ============================================================
+CREATE TABLE page_heroes (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  page_slug TEXT NOT NULL UNIQUE,
+  label TEXT NOT NULL,
+  subtitle TEXT,
+  heading TEXT NOT NULL,
+  description TEXT,
+  image_url TEXT,
+  is_active BOOLEAN NOT NULL DEFAULT true,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+CREATE TRIGGER trg_page_heroes_updated_at BEFORE UPDATE ON page_heroes
+  FOR EACH ROW EXECUTE FUNCTION set_updated_at();
+
+-- ============================================================
 -- QUOTE REQUESTS
 -- ============================================================
 CREATE TABLE quote_requests (
@@ -241,6 +259,7 @@ ALTER TABLE hero_slides ENABLE ROW LEVEL SECURITY;
 ALTER TABLE gallery_items ENABLE ROW LEVEL SECURITY;
 ALTER TABLE site_content ENABLE ROW LEVEL SECURITY;
 ALTER TABLE social_links ENABLE ROW LEVEL SECURITY;
+ALTER TABLE page_heroes ENABLE ROW LEVEL SECURITY;
 ALTER TABLE quote_requests ENABLE ROW LEVEL SECURITY;
 
 -- profiles
@@ -276,6 +295,10 @@ CREATE POLICY "Admin manage content" ON site_content FOR ALL USING (is_admin());
 -- social_links
 CREATE POLICY "Public read active links" ON social_links FOR SELECT USING (is_active = true);
 CREATE POLICY "Admin manage links" ON social_links FOR ALL USING (is_admin());
+
+-- page_heroes
+CREATE POLICY "Public read active page heroes" ON page_heroes FOR SELECT USING (is_active = true);
+CREATE POLICY "Admin manage page heroes" ON page_heroes FOR ALL USING (is_admin());
 
 -- quote_requests
 CREATE POLICY "Public insert quotes" ON quote_requests FOR INSERT WITH CHECK (true);

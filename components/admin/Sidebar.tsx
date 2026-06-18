@@ -20,6 +20,7 @@ const NAV = [
   { label: 'Quote Requests', href: '/admin/quotes', icon: MessageSquare },
   { label: 'Content', href: '/admin/content', icon: FileText },
   { label: 'Hero Slides', href: '/admin/hero-slides', icon: Layers },
+  { label: 'Page Heroes', href: '/admin/page-heroes', icon: ImageIcon },
   { label: 'Gallery', href: '/admin/gallery', icon: ImageIcon },
   { label: 'Products', href: '/admin/products', icon: Package },
   { label: 'Social Links', href: '/admin/social-links', icon: Link2 },

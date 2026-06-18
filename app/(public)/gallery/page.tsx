@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import Image from 'next/image'
 import Link from 'next/link'
 import type { Metadata } from 'next'
+import PageHero from '@/components/public/PageHero'
 
 export const metadata: Metadata = {
   title: 'Gallery | K.K. Danny Enterprise',
@@ -34,15 +35,12 @@ export default async function GalleryPage() {
 
   return (
     <>
-      <div style={{ background: 'var(--navy)' }} className="py-14 sm:py-20">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
-          <span className="section-label">Our Yard & Store</span>
-          <h1 className="text-3xl sm:text-5xl font-extrabold text-white mt-3 mb-4">Photo Gallery</h1>
-          <p className="text-base max-w-xl mx-auto" style={{ color: '#8a9ba8' }}>
-            A look inside K.K. Danny Enterprise — our stock, yard, store interior, and delivery.
-          </p>
-        </div>
-      </div>
+      <PageHero
+        slug="gallery"
+        defaultLabel="Our Yard & Store"
+        defaultHeading="Photo Gallery"
+        defaultDescription="A look inside K.K. Danny Enterprise — our stock, yard, store interior, and delivery."
+      />
       <section className="py-14 sm:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">

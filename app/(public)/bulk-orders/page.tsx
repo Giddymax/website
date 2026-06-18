@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { Package, ArrowRight } from 'lucide-react'
+import PageHero from '@/components/public/PageHero'
 
 export const metadata: Metadata = {
   title: 'Bulk Orders | K.K. Danny Enterprise',
@@ -10,15 +11,12 @@ export const metadata: Metadata = {
 export default function BulkOrdersPage() {
   return (
     <>
-      <div style={{ background: 'var(--navy)' }} className="py-14 sm:py-20">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
-          <span className="section-label">Trade & Contractor</span>
-          <h1 className="text-3xl sm:text-5xl font-extrabold text-white mt-3 mb-4">Bulk Orders</h1>
-          <p className="text-base max-w-xl mx-auto" style={{ color: '#8a9ba8' }}>
-            Supplying full projects — from a housing development to a large commercial build. Call for competitive bulk pricing.
-          </p>
-        </div>
-      </div>
+      <PageHero
+        slug="bulk-orders"
+        defaultLabel="Trade & Contractor"
+        defaultHeading="Bulk Orders"
+        defaultDescription="Supplying full projects — from a housing development to a large commercial build. Call for competitive bulk pricing."
+      />
       <section className="py-14 sm:py-20 max-w-5xl mx-auto px-4 sm:px-6">
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-12">
           {[

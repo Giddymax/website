@@ -3,6 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { CheckCircle } from 'lucide-react'
 import type { Metadata } from 'next'
+import PageHero from '@/components/public/PageHero'
 
 export const metadata: Metadata = {
   title: 'About Us | K.K. Danny Enterprise',
@@ -30,16 +31,12 @@ export default async function AboutPage() {
 
   return (
     <>
-      {/* Page Header */}
-      <div style={{ background: 'var(--navy)' }} className="py-14 sm:py-20">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
-          <span className="section-label">About Us</span>
-          <h1 className="text-3xl sm:text-5xl font-extrabold text-white mt-3 mb-4">K.K. Danny Enterprise</h1>
-          <p className="text-lg max-w-2xl mx-auto" style={{ color: '#8a9ba8' }}>
-            Adeiso&apos;s most dependable building materials and hardware partner since day one.
-          </p>
-        </div>
-      </div>
+      <PageHero
+        slug="about"
+        defaultLabel="About Us"
+        defaultHeading="K.K. Danny Enterprise"
+        defaultDescription="Adeiso's most dependable building materials and hardware partner since day one."
+      />
 
       {/* Story */}
       <section className="py-16 sm:py-20">

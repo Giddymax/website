@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { Phone, MapPin, Mail, Clock } from 'lucide-react'
+import PageHero from '@/components/public/PageHero'
 
 export const metadata: Metadata = {
   title: 'Contact Us | K.K. Danny Enterprise',
@@ -29,15 +30,12 @@ export default async function ContactPage() {
 
   return (
     <>
-      <div style={{ background: 'var(--navy)' }} className="py-14 sm:py-20">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center">
-          <span className="section-label">Get In Touch</span>
-          <h1 className="text-3xl sm:text-5xl font-extrabold text-white mt-3 mb-4">Contact Us</h1>
-          <p className="text-base max-w-xl mx-auto" style={{ color: '#8a9ba8' }}>
-            Walk in, call, or WhatsApp. We&apos;re here to help with your building materials needs.
-          </p>
-        </div>
-      </div>
+      <PageHero
+        slug="contact"
+        defaultLabel="Get In Touch"
+        defaultHeading="Contact Us"
+        defaultDescription="Walk in, call, or WhatsApp. We're here to help with your building materials needs."
+      />
 
       <section className="py-14 sm:py-20 max-w-5xl mx-auto px-4 sm:px-6 grid grid-cols-1 lg:grid-cols-2 gap-12">
         <div>
