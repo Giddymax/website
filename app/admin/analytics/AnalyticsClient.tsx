@@ -142,13 +142,14 @@ export default function AnalyticsClient({ sales }: Props) {
     const now = new Date().toLocaleString('en-GH')
     const base = window.location.origin
 
-    const rows = (arr: { name: string; qty?: number; revenue?: number; profit?: number; margin?: number; spend?: number; count?: number }[], cols: string[]) =>
+    const rows = (arr: { name: string; qty?: number; revenue?: number; cost?: number; profit?: number; margin?: number; spend?: number; count?: number }[], cols: string[]) =>
       arr.map((r, i) => `
         <tr style="background:${i % 2 === 0 ? '#fff' : '#f9fafb'}">
           <td>${i + 1}</td>
           <td>${r.name}</td>
           ${r.qty !== undefined ? `<td style="text-align:right">${r.qty.toFixed(1)}</td>` : ''}
           ${r.revenue !== undefined ? `<td style="text-align:right">${formatCurrency(r.revenue)}</td>` : ''}
+          ${r.cost !== undefined ? `<td style="text-align:right">${formatCurrency(r.cost)}</td>` : ''}
           ${r.profit !== undefined ? `<td style="text-align:right;color:${(r.profit ?? 0) >= 0 ? '#065f46' : '#991b1b'}">${formatCurrency(r.profit ?? 0)}</td>` : ''}
           ${r.spend !== undefined ? `<td style="text-align:right">${formatCurrency(r.spend)}</td>` : ''}
           ${r.count !== undefined ? `<td style="text-align:right">${r.count}</td>` : ''}
@@ -204,17 +205,17 @@ export default function AnalyticsClient({ sales }: Props) {
 
       <h2>Most Sold Items (by quantity)</h2>
       <table><thead><tr>
-        <th style="${thStyle}">#</th><th style="${thStyle}">Item</th><th style="${thStyle};text-align:right">Qty Sold</th><th style="${thStyle};text-align:right">Revenue</th><th style="${thStyle};text-align:right">Profit</th>
+        <th style="${thStyle}">#</th><th style="${thStyle}">Item</th><th style="${thStyle};text-align:right">Qty Sold</th><th style="${thStyle};text-align:right">Revenue</th><th style="${thStyle};text-align:right">Cost</th><th style="${thStyle};text-align:right">Profit/Loss</th>
       </tr></thead><tbody>${rows(stats.mostSold, [])}</tbody></table>
 
       <h2>Highest Profit Items</h2>
       <table><thead><tr>
-        <th style="${thStyle}">#</th><th style="${thStyle}">Item</th><th style="${thStyle};text-align:right">Qty Sold</th><th style="${thStyle};text-align:right">Revenue</th><th style="${thStyle};text-align:right">Profit</th>
+        <th style="${thStyle}">#</th><th style="${thStyle}">Item</th><th style="${thStyle};text-align:right">Qty Sold</th><th style="${thStyle};text-align:right">Revenue</th><th style="${thStyle};text-align:right">Cost</th><th style="${thStyle};text-align:right">Profit/Loss</th>
       </tr></thead><tbody>${rows(stats.highestProfit, [])}</tbody></table>
 
       <h2>Lowest Sold Items (by quantity)</h2>
       <table><thead><tr>
-        <th style="${thStyle}">#</th><th style="${thStyle}">Item</th><th style="${thStyle};text-align:right">Qty Sold</th><th style="${thStyle};text-align:right">Revenue</th><th style="${thStyle};text-align:right">Profit</th>
+        <th style="${thStyle}">#</th><th style="${thStyle}">Item</th><th style="${thStyle};text-align:right">Qty Sold</th><th style="${thStyle};text-align:right">Revenue</th><th style="${thStyle};text-align:right">Cost</th><th style="${thStyle};text-align:right">Profit/Loss</th>
       </tr></thead><tbody>${rows(stats.leastSold, [])}</tbody></table>
 
       <h2>Best Customers (by total spend)</h2>
