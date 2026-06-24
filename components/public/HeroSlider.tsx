@@ -67,10 +67,10 @@ interface Props {
 }
 
 export default function HeroSlider({ slides }: Props) {
-  const displaySlides = (slides && slides.length > 0 ? slides : FALLBACK_SLIDES).map((s, i) => ({
-    ...s,
-    image_url: REAL_IMAGES[i] || s.image_url,
-  }))
+  const hasRealSlides = slides && slides.length > 0
+  const displaySlides = hasRealSlides
+    ? slides
+    : FALLBACK_SLIDES.map((s, i) => ({ ...s, image_url: REAL_IMAGES[i] || s.image_url }))
 
   const [current, setCurrent] = useState(0)
   const [transitioning, setTransitioning] = useState(false)
