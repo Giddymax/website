@@ -108,7 +108,7 @@ export default function HeroSlider({ slides }: Props) {
             sizes="100vw"
           />
           {/* Gradient overlay */}
-          <div className="absolute inset-0" style={{ background: 'linear-gradient(to right, rgba(13,15,24,0.92) 0%, rgba(13,15,24,0.7) 50%, rgba(13,15,24,0.25) 100%)' }} />
+          <div className="absolute inset-0" style={{ background: 'linear-gradient(to right, rgba(13,15,24,0.75) 0%, rgba(13,15,24,0.45) 50%, rgba(13,15,24,0.1) 100%)' }} />
         </div>
       ))}
 
