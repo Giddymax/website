@@ -1,13 +1,15 @@
 {
+  "id": "/",
   "name": "K.K. Danny Enterprise",
   "short_name": "KK Danny",
   "description": "Building Materials Supplier in Adeiso, Ghana",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#fdfdf4",
   "theme_color": "#C8960C",
   "orientation": "any",
-  "scope": "/",
+  "prefer_related_applications": false,
   "icons": [
     {
       "src": "/icons/icon-192.png",
@@ -35,7 +37,6 @@
     }
   ],
   "categories": ["business", "shopping"],
-  "screenshots": [],
   "shortcuts": [
     {
       "name": "Point of Sale",

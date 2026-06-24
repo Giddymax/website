@@ -51,8 +51,8 @@ export default function Navbar({ phone = '0244754803', tagline = 'Building Mater
           <div className="flex items-center justify-between h-16">
             {/* Logo + Brand */}
             <Link href="/" className="flex items-center gap-3 shrink-0">
-              <div className="w-9 h-9 rounded overflow-hidden ring-2 ring-yellow-500/30">
-                <Image src="/logo.png" alt="K.K. Danny Enterprise" width={144} height={144} quality={100} sizes="36px" className="object-cover w-full h-full" priority />
+              <div className="w-10 h-10 rounded-lg overflow-hidden ring-2 ring-yellow-500/30">
+                <Image src="/logo-nav.png" alt="K.K. Danny Enterprise" width={256} height={256} quality={100} sizes="40px" className="object-cover w-full h-full" priority />
               </div>
               <div className="hidden sm:block">
                 <div className="text-white font-extrabold text-sm leading-tight tracking-wide">K.K. DANNY ENTERPRISE</div>

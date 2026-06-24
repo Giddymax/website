@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Toaster } from 'react-hot-toast'
 import ServiceWorkerRegistration from '@/components/ServiceWorkerRegistration'
+import InstallPrompt from '@/components/InstallPrompt'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -35,6 +36,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {children}
         <Toaster position="top-right" toastOptions={{ duration: 4000 }} />
         <ServiceWorkerRegistration />
+        <InstallPrompt />
       </body>
     </html>
   )
