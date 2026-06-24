@@ -4,7 +4,7 @@
   "description": "Building Materials Supplier in Adeiso, Ghana",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#15212c",
+  "background_color": "#fdfdf4",
   "theme_color": "#C8960C",
   "orientation": "any",
   "scope": "/",
