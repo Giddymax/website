@@ -34,12 +34,14 @@ export interface InventoryItem {
   id: string
   name: string
   category: string
+  description: string | null
   image_url: string | null
   price: number
   cost_price: number
   unit: StockUnit
   stock_quantity: number
   low_stock_threshold: number
+  sort_order: number
   is_service: boolean
   is_active: boolean
   created_at: string

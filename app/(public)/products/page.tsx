@@ -26,7 +26,7 @@ const CATEGORIES = [
 
 export default async function ProductsPage() {
   const supabase = await createClient()
-  const { data: products } = await supabase.from('products').select('*').eq('is_active', true).order('sort_order')
+  const { data: products } = await supabase.from('inventory_items').select('*').eq('is_active', true).order('sort_order').order('name')
 
   return (
     <>
@@ -75,7 +75,7 @@ export default async function ProductsPage() {
                     <span className="text-xs font-bold tracking-widest uppercase px-2 py-0.5 rounded-full" style={{ background: 'rgba(200,150,12,0.12)', color: 'var(--gold)' }}>{p.category}</span>
                     <h3 className="font-bold mt-2 mb-1" style={{ color: 'var(--heading-dark)' }}>{p.name}</h3>
                     {p.description && <p className="text-sm" style={{ color: 'var(--text-muted)' }}>{p.description}</p>}
-                    {p.price && <p className="mt-2 font-bold" style={{ color: 'var(--gold)' }}>₵{p.price.toFixed(2)} / {p.unit}</p>}
+                    {p.price > 0 && <p className="mt-2 font-bold" style={{ color: 'var(--gold)' }}>₵{p.price.toFixed(2)} / {p.unit}</p>}
                     <Link href="/quote" className="mt-3 text-xs font-bold tracking-wider uppercase flex items-center gap-1" style={{ color: 'var(--gold)' }}>
                       Request Quote <ArrowRight size={12} />
                     </Link>

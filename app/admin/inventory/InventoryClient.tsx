@@ -10,10 +10,10 @@ import ImageUpload from '@/components/admin/ImageUpload'
 interface Props { items: InventoryItem[] }
 
 const EMPTY: Partial<InventoryItem> = {
-  name: '', category: 'Cement & Concrete', image_url: null,
+  name: '', category: 'Cement & Concrete', description: '', image_url: null,
   price: 0, cost_price: 0,
   unit: 'bag', stock_quantity: 0, low_stock_threshold: 5,
-  is_service: false, is_active: true,
+  sort_order: 0, is_service: false, is_active: true,
 }
 
 function margin(price: number, cost: number) {
@@ -51,10 +51,12 @@ export default function InventoryClient({ items: initialItems }: Props) {
     setLoading(true)
     const supabase = createClient()
     const payload = {
-      name: item.name, category: item.category, image_url: item.image_url || null,
+      name: item.name, category: item.category, description: item.description || null,
+      image_url: item.image_url || null,
       price: item.price, cost_price: item.cost_price ?? 0,
       unit: item.unit, stock_quantity: item.stock_quantity,
       low_stock_threshold: item.low_stock_threshold,
+      sort_order: item.sort_order ?? 0,
       is_service: item.is_service, is_active: item.is_active,
     }
     if (item.id) {
@@ -167,6 +169,10 @@ export default function InventoryClient({ items: initialItems }: Props) {
                 <label className="block text-xs font-semibold text-gray-400 mb-1.5">Name *</label>
                 <input className="admin-input" value={item.name || ''} onChange={e => set('name', e.target.value)} />
               </div>
+              <div>
+                <label className="block text-xs font-semibold text-gray-400 mb-1.5">Description <span className="text-gray-600 font-normal">(shown on public site)</span></label>
+                <textarea className="admin-input resize-none" rows={2} value={item.description || ''} onChange={e => set('description', e.target.value)} placeholder="Brief description for the public product catalogue…" />
+              </div>
               <ImageUpload
                 label="Image"
                 folder="inventory"
@@ -229,7 +235,7 @@ export default function InventoryClient({ items: initialItems }: Props) {
                 </div>
               )}
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-3 gap-3">
                 <div>
                   <label className="block text-xs font-semibold text-gray-400 mb-1.5">Stock Qty</label>
                   <input type="number" className="admin-input" value={item.stock_quantity || ''} onChange={e => set('stock_quantity', e.target.value === '' ? 0 : Number(e.target.value))} min={0} placeholder="0" />
@@ -237,6 +243,10 @@ export default function InventoryClient({ items: initialItems }: Props) {
                 <div>
                   <label className="block text-xs font-semibold text-gray-400 mb-1.5">Low Stock Alert</label>
                   <input type="number" className="admin-input" value={item.low_stock_threshold || ''} onChange={e => set('low_stock_threshold', e.target.value === '' ? 0 : Number(e.target.value))} min={0} placeholder="0" />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold text-gray-400 mb-1.5">Sort Order</label>
+                  <input type="number" className="admin-input" value={item.sort_order || ''} onChange={e => set('sort_order', e.target.value === '' ? 0 : Number(e.target.value))} min={0} placeholder="0" />
                 </div>
               </div>
               <div className="flex gap-4">

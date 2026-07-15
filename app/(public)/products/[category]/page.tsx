@@ -32,10 +32,11 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
   const categoryName = CATEGORY_MAP[category] || category.replace(/-/g, ' ')
   const supabase = await createClient()
   const { data: products } = await supabase
-    .from('products').select('*')
+    .from('inventory_items').select('*')
     .ilike('category', `%${categoryName}%`)
     .eq('is_active', true)
     .order('sort_order')
+    .order('name')
 
   return (
     <>
@@ -61,7 +62,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
                 <div className="p-5">
                   <h3 className="font-bold text-base mb-2" style={{ color: 'var(--heading-dark)' }}>{p.name}</h3>
                   {p.description && <p className="text-sm mb-3" style={{ color: 'var(--text-muted)' }}>{p.description}</p>}
-                  {p.price && <p className="font-bold text-sm mb-3" style={{ color: 'var(--gold)' }}>₵{p.price.toFixed(2)} / {p.unit}</p>}
+                  {p.price > 0 && <p className="font-bold text-sm mb-3" style={{ color: 'var(--gold)' }}>₵{p.price.toFixed(2)} / {p.unit}</p>}
                   <Link href="/quote" className="btn-gold text-xs px-5 py-2.5 w-full flex items-center justify-center gap-1">
                     Request Quote <ArrowRight size={12} />
                   </Link>
