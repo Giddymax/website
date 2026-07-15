@@ -1,5 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import type { Metadata } from 'next'
+
+export const revalidate = 3600
 import Link from 'next/link'
 import { Phone, MapPin, Mail, Clock } from 'lucide-react'
 import PageHero from '@/components/public/PageHero'
@@ -13,7 +15,7 @@ export default async function ContactPage() {
   const supabase = await createClient()
   const { data: siteContent } = await supabase
     .from('site_content')
-    .select('*')
+    .select('key, value')
     .eq('section', 'contact')
 
   const c = (key: string, fallback = '') =>

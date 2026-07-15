@@ -1,5 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import Image from 'next/image'
+
+export const revalidate = 3600
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import PageHero from '@/components/public/PageHero'

@@ -1,5 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import HeroSlider from '@/components/public/HeroSlider'
+
+export const revalidate = 3600
 import Link from 'next/link'
 import Image from 'next/image'
 import { CheckCircle, Truck, Package, Star, ChevronDown, Phone, ArrowRight, MapPin, Clock } from 'lucide-react'
@@ -20,8 +22,8 @@ export default async function HomePage() {
 
   const [{ data: slides }, { data: gallery }, { data: siteContent }] = await Promise.all([
     supabase.from('hero_slides').select('*').eq('is_active', true).order('sort_order'),
-    supabase.from('gallery_items').select('*').eq('is_active', true).order('sort_order').limit(8),
-    supabase.from('site_content').select('*'),
+    supabase.from('gallery_items').select('id, image_url, label, sort_order').eq('is_active', true).order('sort_order').limit(8),
+    supabase.from('site_content').select('key, value, section'),
   ])
 
   const c = (key: string, fallback = '') =>
@@ -109,64 +111,46 @@ export default async function HomePage() {
       </section>
 
       {/* GALLERY STRIP */}
-      {gallery && gallery.length > 0 && (
-        <section className="py-16 sm:py-20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6">
-            <div className="text-center mb-10">
-              <span className="section-label">Our Yard & Store</span>
-              <h2 className="text-3xl sm:text-4xl font-extrabold mt-2" style={{ color: 'var(--heading-dark)' }}>
-                See What We Stock
-              </h2>
+      {(() => {
+        const FALLBACK_GALLERY = [
+          '/images/WhatsApp Image 2026-06-03 at 17.26.55.jpeg',
+          '/images/WhatsApp Image 2026-06-03 at 17.27.00.jpeg',
+          '/images/WhatsApp Image 2026-06-03 at 17.27.06.jpeg',
+          '/images/WhatsApp Image 2026-06-03 at 17.27.10.jpeg',
+          '/images/WhatsApp Image 2026-06-03 at 17.27.15.jpeg',
+          '/images/WhatsApp Image 2026-06-03 at 17.27.21.jpeg',
+          '/images/WhatsApp Image 2026-06-03 at 17.27.24.jpeg',
+          '/images/WhatsApp Image 2026-06-03 at 17.27.25.jpeg',
+        ]
+        const galleryItems = gallery && gallery.length > 0
+          ? gallery
+          : FALLBACK_GALLERY.map((src, i) => ({ id: String(i), image_url: src, label: null }))
+        return (
+          <section className="py-16 sm:py-20">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6">
+              <div className="text-center mb-10">
+                <span className="section-label">Our Yard & Store</span>
+                <h2 className="text-3xl sm:text-4xl font-extrabold mt-2" style={{ color: 'var(--heading-dark)' }}>See What We Stock</h2>
+              </div>
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+                {galleryItems.map((item) => (
+                  <div key={item.id} className="relative rounded-lg overflow-hidden aspect-square group">
+                    <Image src={item.image_url} alt={item.label || 'K.K. Danny Enterprise'} fill className="object-cover group-hover:scale-105 transition-transform duration-300" sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw" />
+                    {item.label && (
+                      <div className="absolute inset-0 flex items-end p-3 opacity-0 group-hover:opacity-100 transition-opacity" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.6), transparent)' }}>
+                        <span className="text-white text-sm font-medium">{item.label}</span>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+              <div className="text-center mt-8">
+                <Link href="/gallery" className="btn-outline-gold">View Full Gallery</Link>
+              </div>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-              {gallery.map((item) => (
-                <div key={item.id} className="relative rounded-lg overflow-hidden aspect-square group">
-                  <Image src={item.image_url} alt={item.label || 'Gallery'} fill className="object-cover group-hover:scale-105 transition-transform duration-300" sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw" />
-                  {item.label && (
-                    <div className="absolute inset-0 flex items-end p-3 opacity-0 group-hover:opacity-100 transition-opacity" style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.6), transparent)' }}>
-                      <span className="text-white text-sm font-medium">{item.label}</span>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-            <div className="text-center mt-8">
-              <Link href="/gallery" className="btn-outline-gold">View Full Gallery</Link>
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* GALLERY STRIP (fallback with real photos) */}
-      {(!gallery || gallery.length === 0) && (
-        <section className="py-16 sm:py-20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6">
-            <div className="text-center mb-10">
-              <span className="section-label">Our Yard & Store</span>
-              <h2 className="text-3xl sm:text-4xl font-extrabold mt-2" style={{ color: 'var(--heading-dark)' }}>See What We Stock</h2>
-            </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-              {[
-                '/images/WhatsApp Image 2026-06-03 at 17.26.55.jpeg',
-                '/images/WhatsApp Image 2026-06-03 at 17.27.00.jpeg',
-                '/images/WhatsApp Image 2026-06-03 at 17.27.06.jpeg',
-                '/images/WhatsApp Image 2026-06-03 at 17.27.10.jpeg',
-                '/images/WhatsApp Image 2026-06-03 at 17.27.15.jpeg',
-                '/images/WhatsApp Image 2026-06-03 at 17.27.21.jpeg',
-                '/images/WhatsApp Image 2026-06-03 at 17.27.24.jpeg',
-                '/images/WhatsApp Image 2026-06-03 at 17.27.25.jpeg',
-              ].map((src, i) => (
-                <div key={i} className="relative rounded-lg overflow-hidden aspect-square group">
-                  <Image src={src} alt={`Gallery photo ${i + 1}`} fill className="object-cover group-hover:scale-105 transition-transform duration-300" sizes="(max-width: 640px) 50vw, 25vw" />
-                </div>
-              ))}
-            </div>
-            <div className="text-center mt-8">
-              <Link href="/gallery" className="btn-outline-gold">View Full Gallery</Link>
-            </div>
-          </div>
-        </section>
-      )}
+          </section>
+        )
+      })()}
 
       {/* QUOTE CTA BAND */}
       <section className="py-14 sm:py-16" style={{ background: 'var(--gold)' }}>

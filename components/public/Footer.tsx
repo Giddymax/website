@@ -45,7 +45,7 @@ function SocialIcon({ platform }: { platform: string }) {
 export default async function Footer() {
   const supabase = await createClient()
   const [{ data: siteContent }, { data: socialLinks }] = await Promise.all([
-    supabase.from('site_content').select('*').in('section', ['contact', 'footer', 'general']),
+    supabase.from('site_content').select('key, value').in('section', ['contact', 'footer', 'general']),
     supabase.from('social_links').select('*').eq('is_active', true).order('sort_order'),
   ])
 

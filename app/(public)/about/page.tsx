@@ -1,5 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import Image from 'next/image'
+
+export const revalidate = 3600
 import Link from 'next/link'
 import { CheckCircle } from 'lucide-react'
 import type { Metadata } from 'next'
@@ -23,7 +25,7 @@ export default async function AboutPage() {
   const supabase = await createClient()
   const { data: siteContent } = await supabase
     .from('site_content')
-    .select('*')
+    .select('key, value')
     .in('section', ['about', 'contact'])
 
   const c = (key: string, fallback = '') =>

@@ -1,5 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
+
+export const revalidate = 3600
 import Image from 'next/image'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
 import type { Metadata } from 'next'

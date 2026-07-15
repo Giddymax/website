@@ -1,6 +1,8 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import type { Metadata } from 'next'
+
+export const revalidate = 3600
 import { CheckCircle, Truck } from 'lucide-react'
 import PageHero from '@/components/public/PageHero'
 
