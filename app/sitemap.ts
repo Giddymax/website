@@ -1,6 +1,6 @@
 import type { MetadataRoute } from 'next'
 
-const BASE = 'https://kkdannyenterprise.com'
+const BASE = 'https://kkdanny.com'
 
 const CATEGORY_SLUGS = [
   'cement-concrete', 'steel-reinforcement', 'roofing-materials',

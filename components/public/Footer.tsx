@@ -54,9 +54,9 @@ export default async function Footer() {
 
   const phones = [c('phone1', '0244754803'), c('phone2', '0249986118'), c('phone3', '0240268125')].filter(Boolean)
   const address = c('address', 'Opp. Radiance Gas Filling Station, Near Point 3 Hotel, Adeiso, Eastern Region, Ghana')
-  const email = c('email', 'info@kkdannyenterprise.com')
+  const email = c('email', 'info@kkdanny.com')
   const tagline = c('footer_tagline', "Adeiso's most reliable source for cement, steel, roofing, paint, tiles, timber, tools, and more.")
-  const copyright = c('footer_copyright', '© 2025 K.K. Danny Enterprise. All rights reserved.')
+  const copyright = c('footer_copyright', '© 2026 K.K. Danny Enterprise. All rights reserved.')
 
   return (
     <footer style={{ background: 'var(--navy)', color: '#c0c9d2' }}>

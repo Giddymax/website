@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   keywords: ['building materials', 'cement', 'rebar', 'roofing sheets', 'paint', 'tiles', 'timber', 'hardware', 'Adeiso', 'Ghana', 'Eastern Region'],
   authors: [{ name: 'K.K. Danny Enterprise' }],
   creator: 'K.K. Danny Enterprise',
-  metadataBase: new URL('https://kkdannyenterprise.com'),
+  metadataBase: new URL('https://kkdanny.com'),
   alternates: { canonical: '/' },
   manifest: '/manifest.json',
   appleWebApp: {
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     title: 'K.K. Danny Enterprise | Building Materials Supplier in Adeiso',
     description: 'Quality & Affordable Building Materials in Adeiso, Eastern Region, Ghana. Cement, steel, roofing, paint, tiles, timber, hardware & same-day delivery.',
     type: 'website',
-    url: 'https://kkdannyenterprise.com',
+    url: 'https://kkdanny.com',
     siteName: 'K.K. Danny Enterprise',
     locale: 'en_GH',
     images: [{ url: '/logo.png', width: 1200, height: 630, alt: 'K.K. Danny Enterprise' }],

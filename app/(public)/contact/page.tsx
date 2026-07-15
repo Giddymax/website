@@ -28,7 +28,7 @@ export default async function ContactPage() {
   ].filter(Boolean)
 
   const address = c('address', 'Opp. Radiance Gas Filling Station, Near Point 3 Hotel, Adeiso, Eastern Region, Ghana')
-  const email = c('email', 'info@kkdannyenterprise.com')
+  const email = c('email', 'info@kkdanny.com')
 
   return (
     <>

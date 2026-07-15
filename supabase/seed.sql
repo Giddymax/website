@@ -82,8 +82,8 @@ INSERT INTO site_content (key, value, section) VALUES
 ('phone1', '0244754803', 'contact'),
 ('phone2', '0249986118', 'contact'),
 ('phone3', '0240268125', 'contact'),
-('email', 'info@kkdannyenterprise.com', 'contact'),
-('website', 'kkdannyenterprise.com', 'contact'),
+('email', 'info@kkdanny.com', 'contact'),
+('website', 'kkdanny.com', 'contact'),
 -- About
 ('about_heading', 'About K.K. Danny Enterprise', 'about'),
 ('about_body', 'K.K. Danny Enterprise is a trusted building materials and hardware supply company based in Adeiso, Eastern Region, Ghana. We serve individual home builders, contractors, developers, and the broader construction community with quality products at competitive prices. Our yard is fully stocked with cement, steel, roofing sheets, tiles, paint, timber, tools, wire, pipes, and more. We also offer fast same-day delivery via our branded cargo tricycle.', 'about'),
@@ -113,7 +113,7 @@ INSERT INTO site_content (key, value, section) VALUES
 ('header_tagline', 'Building Materials & Services', 'header'),
 -- Footer
 ('footer_tagline', 'Adeiso''s most reliable source for cement, steel, roofing, paint, tiles, timber, tools, and more.', 'footer'),
-('footer_copyright', '© 2025 K.K. Danny Enterprise. All rights reserved.', 'footer'),
+('footer_copyright', '© 2026 K.K. Danny Enterprise. All rights reserved.', 'footer'),
 -- SEO
 ('seo_title', 'K.K. Danny Enterprise | Building Materials Supplier in Adeiso, Ghana', 'seo'),
 ('seo_description', 'K.K. Danny Enterprise in Adeiso supplies quality cement, steel rebar, roofing sheets, paint, tiles, timber, tools, and more at affordable prices. Fast delivery.', 'seo');

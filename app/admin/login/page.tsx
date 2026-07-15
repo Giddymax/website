@@ -52,7 +52,7 @@ export default function LoginPage() {
                 className="admin-input"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
-                placeholder="staff@kkdannyenterprise.com"
+                placeholder="staff@kkdanny.com"
                 autoComplete="email"
                 required
               />
@@ -80,7 +80,7 @@ export default function LoginPage() {
           </form>
         </div>
         <p className="text-center mt-6 text-xs" style={{ color: '#3a4d5e' }}>
-          © 2025 K.K. Danny Enterprise · Staff only
+          © 2026 K.K. Danny Enterprise · Staff only
         </p>
       </div>
     </div>

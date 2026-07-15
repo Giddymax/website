@@ -4,9 +4,9 @@ export default function JsonLd() {
     '@type': 'HardwareStore',
     name: 'K.K. Danny Enterprise',
     description: 'Building materials and hardware supplier in Adeiso, Eastern Region, Ghana. Cement, steel, roofing, paint, tiles, timber, tools, and same-day delivery.',
-    url: 'https://kkdannyenterprise.com',
+    url: 'https://kkdanny.com',
     telephone: ['+233244754803', '+233249986118', '+233240268125'],
-    email: 'info@kkdannyenterprise.com',
+    email: 'info@kkdanny.com',
     address: {
       '@type': 'PostalAddress',
       streetAddress: 'Opp. Radiance Gas Filling Station, Near Point 3 Hotel',

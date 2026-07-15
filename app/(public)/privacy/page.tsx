@@ -105,7 +105,7 @@ export default function PrivacyPage() {
             <p>If you have any questions about this privacy policy or how we handle your data, please reach out:</p>
             <ul className="mt-3 space-y-1 text-sm">
               <li><span className="font-semibold" style={{ color: 'var(--heading-dark)' }}>Phone:</span> 0244754803</li>
-              <li><span className="font-semibold" style={{ color: 'var(--heading-dark)' }}>Email:</span> kkdannyenterprise@gmail.com</li>
+              <li><span className="font-semibold" style={{ color: 'var(--heading-dark)' }}>Email:</span> info@kkdanny.com</li>
               <li><span className="font-semibold" style={{ color: 'var(--heading-dark)' }}>Location:</span> Adeiso, Eastern Region, Ghana</li>
             </ul>
           </div>

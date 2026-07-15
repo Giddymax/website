@@ -9,6 +9,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ['/admin/', '/api/'],
       },
     ],
-    sitemap: 'https://kkdannyenterprise.com/sitemap.xml',
+    sitemap: 'https://kkdanny.com/sitemap.xml',
   }
 }
