@@ -8,7 +8,7 @@ const CATEGORIES = [
   { name: 'Cement & Concrete', slug: 'cement-concrete', img: '/images/WhatsApp Image 2026-06-03 at 17.27.10.jpeg', desc: 'Cement bags, concrete mix, aggregates' },
   { name: 'Steel & Reinforcement', slug: 'steel-reinforcement', img: '/images/WhatsApp Image 2026-06-03 at 17.27.00.jpeg', desc: 'Rebar, BRC mesh, binding wire, Star Steels' },
   { name: 'Roofing Materials', slug: 'roofing-materials', img: '/images/WhatsApp Image 2026-06-04 at 00.49.37 (2).jpeg', desc: 'Zinc, aluminium, coloured sheets, fittings' },
-  { name: 'Paint & Finishes', slug: 'paint-finishes', img: '/images/WhatsApp Image 2026-06-03 at 17.27.21.jpeg', desc: 'De-Luxy acrylic paint, primers, solvents' },
+  { name: 'Paint & Finishes', slug: 'paint-finishes', img: '/images/WhatsApp Image 2026-06-03 at 17.27.21.jpeg', desc: 'Acrylic paint, primers, solvents & finishes' },
   { name: 'Tiles & Flooring', slug: 'tiles-flooring', img: '/images/WhatsApp Image 2026-06-03 at 17.27.15.jpeg', desc: 'Ceramic, porcelain floor & wall tiles' },
   { name: 'Hardware & Tools', slug: 'hardware-fasteners', img: '/images/WhatsApp Image 2026-06-04 at 00.49.38.jpeg', desc: 'Nails, screws, hand tools, wheelbarrows' },
 ]

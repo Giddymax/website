@@ -38,7 +38,7 @@ INSERT INTO products (name, slug, category, description, unit, sort_order) VALUE
 ('BRC Wire Mesh Panels', 'brc-wire-mesh', 'Steel & Reinforcement', 'Welded reinforcement mesh panels for slabs and concrete reinforcement. Various gauge and spacing options.', 'sheet', 4),
 ('Corrugated Roofing Sheets', 'corrugated-roofing', 'Roofing Materials', 'Zinc, aluminium, and painted corrugated roofing sheets in standard lengths. Durable protection for any building.', 'sheet', 5),
 ('Coloured Roof Sheets', 'coloured-roof-sheets', 'Roofing Materials', 'Pre-painted roof sheets in charcoal grey, ox-blood red, and forest green. Add character to your building.', 'sheet', 6),
-('De-Luxy Acrylic Paint', 'de-luxy-paint', 'Paint & Finishes', 'De-Luxy premium acrylic emulsion paint in all colours. Available from small tins to 20-litre buckets. Interior and exterior grades.', 'tin', 7),
+('Acrylic Paint', 'acrylic-paint', 'Paint & Finishes', 'Premium acrylic emulsion paint in all colours. Available from small tins to 20-litre buckets. Interior and exterior grades from top brands.', 'tin', 7),
 ('Primers & Solvents', 'primers-solvents', 'Paint & Finishes', 'Undercoat primers, solvents, and paint accessories. Prepare surfaces and get a professional finish.', 'tin', 8),
 ('Ceramic Floor Tiles', 'ceramic-tiles', 'Tiles & Flooring', 'Quality ceramic and porcelain floor and wall tiles in a wide range of designs, sizes, and finishes.', 'piece', 9),
 ('Structural Timber', 'structural-timber', 'Timber & Lumber', 'Sawn timber, planks, and battens for roofing, formwork, carpentry, and structural use.', 'piece', 10),
@@ -59,8 +59,8 @@ INSERT INTO inventory_items (name, category, price, unit, stock_quantity, low_st
 ('Corrugated Zinc Sheet 10ft', 'Roofing Materials', 68.00, 'sheet', 150, 20),
 ('Coloured Roof Sheet Charcoal 8ft', 'Roofing Materials', 75.00, 'sheet', 100, 15),
 ('Coloured Roof Sheet Red 8ft', 'Roofing Materials', 75.00, 'sheet', 80, 15),
-('De-Luxy Paint 4L', 'Paint & Finishes', 85.00, 'tin', 60, 10),
-('De-Luxy Paint 20L', 'Paint & Finishes', 380.00, 'tin', 30, 5),
+('Acrylic Paint 4L', 'Paint & Finishes', 85.00, 'tin', 60, 10),
+('Acrylic Paint 20L', 'Paint & Finishes', 380.00, 'tin', 30, 5),
 ('Floor Tiles 60x60cm (box)', 'Tiles & Flooring', 120.00, 'piece', 80, 10),
 ('PVC Pipe 4inch x 6m', 'Pipes & Plumbing', 45.00, 'piece', 50, 8),
 ('Wheelbarrow', 'Tools & Equipment', 350.00, 'piece', 15, 2),
@@ -131,7 +131,7 @@ INSERT INTO gallery_items (label, image_url, category, sort_order) VALUES
 ('Cement Stock', '/images/gallery-cement.jpg', 'Stock', 1),
 ('Steel Rebar Yard', '/images/gallery-rebar.jpg', 'Stock', 2),
 ('Coloured Roofing Sheets', '/images/gallery-roofing.jpg', 'Stock', 3),
-('Paint Section — De-Luxy', '/images/gallery-paint.jpg', 'Store Interior', 4),
+('Paint Section', '/images/gallery-paint.jpg', 'Store Interior', 4),
 ('Hardware & Tools', '/images/gallery-hardware.jpg', 'Store Interior', 5),
 ('Delivery Tricycle', '/images/gallery-delivery.jpg', 'Delivery', 6);
 
