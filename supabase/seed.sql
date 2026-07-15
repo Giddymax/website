@@ -32,7 +32,7 @@ INSERT INTO hero_slides (title, subtitle, heading, body, button1_text, button1_h
 
 -- PRODUCTS (public catalogue)
 INSERT INTO products (name, slug, category, description, unit, sort_order) VALUES
-('Ghacem Cement Bags', 'ghacem-cement', 'Cement & Concrete', 'Premium Ghacem ordinary portland cement, 50kg bags. The most trusted cement brand in Ghana for foundations, blocks, and concrete work.', 'bag', 1),
+('Cement Bags', 'cement-bags', 'Cement & Concrete', 'Premium ordinary portland cement, 50kg bags. Quality cement for foundations, blocks, columns, and all concrete work.', 'bag', 1),
 ('Concrete Mix Supplies', 'concrete-mix', 'Cement & Concrete', 'Sharp sand, gravel, and aggregates for concrete mixing. Available in bulk or per trip.', 'bag', 2),
 ('Reinforcement Bars (Rebar)', 'rebar', 'Steel & Reinforcement', 'High tensile steel reinforcement bars in all standard sizes — 8mm, 10mm, 12mm, 16mm, 20mm. Star Steels and other brands.', 'piece', 3),
 ('BRC Wire Mesh Panels', 'brc-wire-mesh', 'Steel & Reinforcement', 'Welded reinforcement mesh panels for slabs and concrete reinforcement. Various gauge and spacing options.', 'sheet', 4),
@@ -50,7 +50,7 @@ INSERT INTO products (name, slug, category, description, unit, sort_order) VALUE
 
 -- INVENTORY ITEMS
 INSERT INTO inventory_items (name, category, price, unit, stock_quantity, low_stock_threshold) VALUES
-('Ghacem Cement 50kg', 'Cement & Concrete', 75.00, 'bag', 250, 20),
+('Cement 50kg', 'Cement & Concrete', 75.00, 'bag', 250, 20),
 ('Rebar 12mm x 12m', 'Steel & Reinforcement', 185.00, 'piece', 80, 10),
 ('Rebar 10mm x 12m', 'Steel & Reinforcement', 130.00, 'piece', 100, 10),
 ('Rebar 8mm x 12m', 'Steel & Reinforcement', 90.00, 'piece', 120, 10),
@@ -105,7 +105,7 @@ INSERT INTO site_content (key, value, section) VALUES
 ('faq3_q', 'Do you sell single bags of cement or in bulk only?', 'faq'),
 ('faq3_a', 'We sell by the bag, by the pallet, or in bulk. Any quantity is welcome — walk in or call ahead.', 'faq'),
 ('faq4_q', 'What brands of cement and steel do you stock?', 'faq'),
-('faq4_a', 'We primarily stock Ghacem cement and Star Steels reinforcement bars. We carry both popular market brands and alternatives.', 'faq'),
+('faq4_a', 'We stock quality cement bags and reinforcement bars from trusted suppliers. We carry both popular market brands and alternatives.', 'faq'),
 ('faq5_q', 'Do you accept Mobile Money payment?', 'faq'),
 ('faq5_a', 'Yes. We accept cash, Mobile Money (MTN MoMo, AirtelTigo Money, Telecel Cash), and bank transfer.', 'faq'),
 -- Header / Navbar
@@ -128,7 +128,7 @@ INSERT INTO social_links (platform, url, is_active, sort_order) VALUES
 
 -- GALLERY ITEMS (placeholders — replace with real uploads)
 INSERT INTO gallery_items (label, image_url, category, sort_order) VALUES
-('Cement Stock — Ghacem Bags', '/images/gallery-cement.jpg', 'Stock', 1),
+('Cement Stock', '/images/gallery-cement.jpg', 'Stock', 1),
 ('Steel Rebar Yard', '/images/gallery-rebar.jpg', 'Stock', 2),
 ('Coloured Roofing Sheets', '/images/gallery-roofing.jpg', 'Stock', 3),
 ('Paint Section — De-Luxy', '/images/gallery-paint.jpg', 'Store Interior', 4),
