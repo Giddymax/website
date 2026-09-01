@@ -80,12 +80,12 @@ export default function ReceiptModal({ sale, items, staffName, onClose }: Props)
 
         {/* Receipt Preview */}
         <div className="overflow-y-auto max-h-[70vh] p-4">
-          <div id="receipt-print" ref={receiptRef} style={{ fontFamily: "'Courier New', monospace", fontSize: '11px', color: '#000', background: '#fff', padding: '16px', borderRadius: '4px', lineHeight: '1.5' }}>
+          <div id="receipt-print" ref={receiptRef} style={{ fontFamily: "'Courier New', Courier, monospace", fontSize: '12px', fontWeight: 700, color: '#000', background: '#fff', padding: '16px', borderRadius: '4px', lineHeight: '1.6', WebkitFontSmoothing: 'antialiased' }}>
             {/* Header */}
             <div className="center bold" style={{ textAlign: 'center', marginBottom: '4px' }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/logo.png" alt="K.K. Danny Enterprise" style={{ maxWidth: '100px', height: 'auto', margin: '0 auto 6px', display: 'block' }} />
-              <div style={{ fontWeight: 'bold', fontSize: '13px' }}>K.K. DANNY ENTERPRISE</div>
+              <div style={{ fontWeight: 800, fontSize: '15px' }}>K.K. DANNY ENTERPRISE</div>
               <div>Quality &amp; Affordable Building Materials</div>
               <div>Adeiso, Eastern Region, Ghana</div>
               <div>Tel: 0244754803 / 0249986118</div>
@@ -101,10 +101,10 @@ export default function ReceiptModal({ sale, items, staffName, onClose }: Props)
             <div style={{ display: 'flex', justifyContent: 'space-between' }}><span>Payment:</span><span>{sale.payment_method?.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}</span></div>
             {sale.notes && <div style={{ display: 'flex', justifyContent: 'space-between' }}><span>Note:</span><span>{sale.notes}</span></div>}
 
-            <div style={{ borderTop: '1px dashed #000', margin: '6px 0' }} />
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '10px' }}>
+            <div style={{ borderTop: '2px dashed #000', margin: '6px 0' }} />
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '11px' }}>
               <thead>
-                <tr style={{ fontWeight: 'bold' }}>
+                <tr style={{ fontWeight: 800 }}>
                   <th style={{ textAlign: 'left', padding: '0 2px 0 0' }}>Item</th>
                   <th style={{ textAlign: 'center', padding: '0 2px' }}>Qty</th>
                   <th style={{ textAlign: 'right', padding: '0 2px' }}>Price</th>
@@ -112,37 +112,37 @@ export default function ReceiptModal({ sale, items, staffName, onClose }: Props)
                 </tr>
               </thead>
             </table>
-            <div style={{ borderTop: '1px dashed #000', margin: '4px 0' }} />
+            <div style={{ borderTop: '2px dashed #000', margin: '4px 0' }} />
 
             {items.length > 0 ? (
-              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '10px' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '11px' }}>
                 <tbody>
                   {items.map((item, i) => (
                     <tr key={i}>
                       <td style={{ textAlign: 'left', verticalAlign: 'top', padding: '2px 2px 2px 0' }}>
                         {item.item_name}
-                        {item.unit && <div style={{ fontSize: '9px', color: '#555' }}>{item.unit}</div>}
+                        {item.unit && <div style={{ fontSize: '10px', fontWeight: 600, color: '#333' }}>{item.unit}</div>}
                       </td>
                       <td style={{ textAlign: 'center', verticalAlign: 'top', padding: '2px' }}>{item.quantity}</td>
                       <td style={{ textAlign: 'right', verticalAlign: 'top', padding: '2px' }}>{formatCurrency(item.unit_price)}</td>
-                      <td style={{ textAlign: 'right', verticalAlign: 'top', padding: '2px 0 2px 2px', fontWeight: 'bold' }}>{formatCurrency(item.line_total)}</td>
+                      <td style={{ textAlign: 'right', verticalAlign: 'top', padding: '2px 0 2px 2px', fontWeight: 800 }}>{formatCurrency(item.line_total)}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
-            ) : <div style={{ textAlign: 'center', color: '#666', margin: '4px 0' }}>(item details unavailable)</div>}
+            ) : <div style={{ textAlign: 'center', color: '#333', margin: '4px 0', fontWeight: 700 }}>(item details unavailable)</div>}
 
-            <div style={{ borderTop: '1px dashed #000', margin: '6px 0' }} />
+            <div style={{ borderTop: '2px dashed #000', margin: '6px 0' }} />
             <div style={{ display: 'flex', justifyContent: 'space-between' }}><span>SUBTOTAL</span><span>{formatCurrency(sale.subtotal)}</span></div>
             {sale.discount > 0 && <div style={{ display: 'flex', justifyContent: 'space-between' }}><span>DISCOUNT</span><span>-{formatCurrency(sale.discount)}</span></div>}
-            <div style={{ borderTop: '1px dashed #000', margin: '4px 0' }} />
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 'bold' }}><span>TOTAL</span><span>{formatCurrency(sale.total)}</span></div>
+            <div style={{ borderTop: '2px dashed #000', margin: '4px 0' }} />
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 900, fontSize: '13px' }}><span>TOTAL</span><span>{formatCurrency(sale.total)}</span></div>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}><span>PAID</span><span>{formatCurrency(sale.amount_paid)}</span></div>
-            {sale.change_due > 0 && <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 'bold' }}><span>CHANGE</span><span>{formatCurrency(sale.change_due)}</span></div>}
-            {sale.balance_due > 0 && <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 'bold' }}><span>BALANCE DUE</span><span>{formatCurrency(sale.balance_due)}</span></div>}
+            {sale.change_due > 0 && <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 900 }}><span>CHANGE</span><span>{formatCurrency(sale.change_due)}</span></div>}
+            {sale.balance_due > 0 && <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 900 }}><span>BALANCE DUE</span><span>{formatCurrency(sale.balance_due)}</span></div>}
 
-            <div style={{ borderTop: '2px solid #000', margin: '8px 0' }} />
-            <div style={{ textAlign: 'center', fontWeight: 'bold', fontSize: '10px' }}>
+            <div style={{ borderTop: '3px solid #000', margin: '8px 0' }} />
+            <div style={{ textAlign: 'center', fontWeight: 800, fontSize: '11px' }}>
               <div>{getPaymentStatus()}</div>
               <div style={{ marginTop: '6px' }}>Thank you for your patronage!</div>
               <div>*** CUSTOMER COPY ***</div>
