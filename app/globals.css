@@ -164,9 +164,10 @@ body {
   #receipt-print, #receipt-print * { visibility: visible; }
   #receipt-print {
     position: fixed;
-    left: 0; top: 0;
+    left: 50%; top: 0;
     width: 76mm;
     padding: 2mm;
+    transform: translateX(-50%);
   }
   @page {
     size: 80mm auto;
