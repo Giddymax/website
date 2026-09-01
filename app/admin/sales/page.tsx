@@ -5,7 +5,7 @@ export default async function SalesPage() {
   const supabase = await createClient()
 
   const [{ data: sales }, { data: { user } }] = await Promise.all([
-    supabase.from('sales').select('*, sale_items(*)').order('created_at', { ascending: false }).limit(200),
+    supabase.from('sales').select('*, sale_items(*), profiles(full_name)').order('created_at', { ascending: false }).limit(200),
     supabase.auth.getUser(),
   ])
 

@@ -158,14 +158,19 @@ body {
   border-color: var(--gold);
 }
 
-/* ── Print receipt ── */
+/* ── Print receipt (80mm thermal) ── */
 @media print {
   body * { visibility: hidden; }
   #receipt-print, #receipt-print * { visibility: visible; }
   #receipt-print {
     position: fixed;
     left: 0; top: 0;
-    width: 302px;
+    width: 76mm;
+    padding: 2mm;
+  }
+  @page {
+    size: 80mm auto;
+    margin: 0;
   }
 }
 

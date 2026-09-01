@@ -28,7 +28,7 @@ export default function SalesClient({ sales: initialSales, role }: Props) {
   const [sales, setSales] = useState(initialSales)
   const [search, setSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState('all')
-  const [receipt, setReceipt] = useState<{ sale: Sale; items: SaleItem[] } | null>(null)
+  const [receipt, setReceipt] = useState<{ sale: Sale; items: SaleItem[]; staffName?: string } | null>(null)
   const [editingSale, setEditingSale] = useState<SaleWithItems | null>(null)
   const [editForm, setEditForm] = useState<EditForm | null>(null)
   const [deletingId, setDeletingId] = useState<string | null>(null)
@@ -208,7 +208,7 @@ export default function SalesClient({ sales: initialSales, role }: Props) {
                   <td className="px-3 py-3 text-gray-500 text-xs whitespace-nowrap">{formatDateTime(sale.created_at)}</td>
                   <td className="px-3 py-3">
                     <div className="flex items-center gap-1">
-                      <button type="button" onClick={() => setReceipt({ sale, items: sale.sale_items || [] })}
+                      <button type="button" onClick={() => setReceipt({ sale, items: sale.sale_items || [], staffName: sale.profiles?.full_name || undefined })}
                         className="flex items-center gap-1 text-xs font-semibold px-2 py-1.5 rounded transition-colors hover:bg-white/10 text-gray-400 hover:text-white">
                         <Printer size={12} /> Print
                       </button>
@@ -383,7 +383,7 @@ export default function SalesClient({ sales: initialSales, role }: Props) {
       )}
 
       {receipt && (
-        <ReceiptModal sale={receipt.sale} items={receipt.items} onClose={() => setReceipt(null)} />
+        <ReceiptModal sale={receipt.sale} items={receipt.items} staffName={receipt.staffName} onClose={() => setReceipt(null)} />
       )}
     </div>
   )

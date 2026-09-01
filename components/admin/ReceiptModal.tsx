@@ -16,73 +16,12 @@ export default function ReceiptModal({ sale, items, staffName, onClose }: Props)
   const receiptRef = useRef<HTMLDivElement>(null)
   const [savingPdf, setSavingPdf] = useState(false)
 
+  // Prints the receipt directly — no popup window. The #receipt-print rule in
+  // globals.css hides the rest of the page and sizes the printed page to
+  // match an 80mm thermal roll, so this goes straight to the browser's print
+  // dialog targeting the real printer.
   function printReceipt() {
-    const content = receiptRef.current?.innerHTML || ''
-    const base = window.location.origin
-    const win = window.open('', '_blank', 'width=500,height=750')
-    if (!win) {
-      toast.error('Pop-up blocked — please allow pop-ups for this site to print.')
-      return
-    }
-
-    const thermalCSS = `
-      @page { size: 80mm auto; margin: 2mm; }
-      body {
-        font-family: 'Courier New', monospace;
-        font-size: 10px;
-        line-height: 1.4;
-        margin: 0;
-        padding: 4px;
-        width: 72mm;
-        background: white;
-        color: black;
-      }
-      img { max-width: 80px; display: block; margin: 0 auto 4px; }
-      div { word-break: break-word; }
-    `
-
-    win.document.write(`
-      <html><head>
-        <title>Receipt — ${sale.sale_ref}</title>
-        <base href="${base}/">
-        <style>
-          * { box-sizing: border-box; }
-          ${thermalCSS}
-          table { width: 100%; border-collapse: collapse; }
-          td { vertical-align: top; padding: 1px 0; }
-        </style>
-      </head>
-      <body>${content}</body></html>
-    `)
-    win.document.close()
-
-    // Wait for the logo image (if any) to finish loading before printing,
-    // instead of guessing with a fixed timeout.
-    const finishAndPrint = () => {
-      win.focus()
-      win.print()
-      win.close()
-    }
-    const images = win.document.images
-    if (images.length === 0) {
-      setTimeout(finishAndPrint, 150)
-    } else {
-      let loaded = 0
-      let done = false
-      const maybeFinish = () => {
-        loaded++
-        if (loaded >= images.length && !done) {
-          done = true
-          finishAndPrint()
-        }
-      }
-      Array.from(images).forEach(img => {
-        if (img.complete) maybeFinish()
-        else { img.onload = maybeFinish; img.onerror = maybeFinish }
-      })
-      // Fallback in case a load/error event never fires.
-      setTimeout(() => { if (!done) { done = true; finishAndPrint() } }, 1500)
-    }
+    window.print()
   }
 
   async function saveAsPDF() {
@@ -102,23 +41,16 @@ export default function ReceiptModal({ sale, items, staffName, onClose }: Props)
       })
       const imgData = canvas.toDataURL('image/png')
 
-      const pdf = new jsPDF({ unit: 'mm', format: 'a4' })
-      const pageWidth = pdf.internal.pageSize.getWidth()
-      const pageHeight = pdf.internal.pageSize.getHeight()
-      const margin = 15
-      const availWidth = pageWidth - margin * 2
-      const availHeight = pageHeight - margin * 2
+      // Match the physical 80mm thermal roll — auto-height to fit content,
+      // same as a real receipt printout rather than a full A4 sheet.
+      const pageWidthMM = 80
+      const margin = 2
+      const contentWidthMM = pageWidthMM - margin * 2
+      const contentHeightMM = (canvas.height * contentWidthMM) / canvas.width
+      const pageHeightMM = contentHeightMM + margin * 2
 
-      let renderWidth = availWidth
-      let renderHeight = (canvas.height * renderWidth) / canvas.width
-      if (renderHeight > availHeight) {
-        renderHeight = availHeight
-        renderWidth = (canvas.width * renderHeight) / canvas.height
-      }
-      const x = margin + (availWidth - renderWidth) / 2
-      const y = margin
-
-      pdf.addImage(imgData, 'PNG', x, y, renderWidth, renderHeight)
+      const pdf = new jsPDF({ unit: 'mm', format: [pageWidthMM, pageHeightMM] })
+      pdf.addImage(imgData, 'PNG', margin, margin, contentWidthMM, contentHeightMM)
       pdf.save(`Receipt-${sale.sale_ref}.pdf`)
     } catch (err) {
       console.error('Failed to generate receipt PDF', err)
@@ -148,7 +80,7 @@ export default function ReceiptModal({ sale, items, staffName, onClose }: Props)
 
         {/* Receipt Preview */}
         <div className="overflow-y-auto max-h-[70vh] p-4">
-          <div ref={receiptRef} style={{ fontFamily: "'Courier New', monospace", fontSize: '11px', color: '#000', background: '#fff', padding: '16px', borderRadius: '4px', lineHeight: '1.5' }}>
+          <div id="receipt-print" ref={receiptRef} style={{ fontFamily: "'Courier New', monospace", fontSize: '11px', color: '#000', background: '#fff', padding: '16px', borderRadius: '4px', lineHeight: '1.5' }}>
             {/* Header */}
             <div className="center bold" style={{ textAlign: 'center', marginBottom: '4px' }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -161,29 +93,44 @@ export default function ReceiptModal({ sale, items, staffName, onClose }: Props)
             </div>
             <div style={{ borderTop: '1px dashed #000', margin: '6px 0' }} />
 
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}><span>Receipt No:</span><span>{sale.sale_ref}</span></div>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}><span>Date:</span><span>{dateStr} {timeStr}</span></div>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}><span>Ref:</span><span>{sale.sale_ref}</span></div>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}><span>Cust:</span><span>{sale.customer_name || 'Walk-in'}</span></div>
+            {staffName && <div style={{ display: 'flex', justifyContent: 'space-between' }}><span>Served By:</span><span>{staffName}</span></div>}
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}><span>Customer:</span><span>{sale.customer_name || 'Walk-in'}</span></div>
             {sale.customer_phone && <div style={{ display: 'flex', justifyContent: 'space-between' }}><span>Tel:</span><span>{sale.customer_phone}</span></div>}
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}><span>Pay:</span><span>{sale.payment_method?.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}</span></div>
-            {staffName && <div style={{ display: 'flex', justifyContent: 'space-between' }}><span>Serv:</span><span>{staffName}</span></div>}
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}><span>Payment:</span><span>{sale.payment_method?.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}</span></div>
             {sale.notes && <div style={{ display: 'flex', justifyContent: 'space-between' }}><span>Note:</span><span>{sale.notes}</span></div>}
 
             <div style={{ borderTop: '1px dashed #000', margin: '6px 0' }} />
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: 'bold' }}>
-              <span>ITEM</span><span>QTY&nbsp;&nbsp;&nbsp;TOTAL</span>
-            </div>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '10px' }}>
+              <thead>
+                <tr style={{ fontWeight: 'bold' }}>
+                  <th style={{ textAlign: 'left', padding: '0 2px 0 0' }}>Item</th>
+                  <th style={{ textAlign: 'center', padding: '0 2px' }}>Qty</th>
+                  <th style={{ textAlign: 'right', padding: '0 2px' }}>Price</th>
+                  <th style={{ textAlign: 'right', padding: '0 0 0 2px' }}>Total</th>
+                </tr>
+              </thead>
+            </table>
             <div style={{ borderTop: '1px dashed #000', margin: '4px 0' }} />
 
-            {items.length > 0 ? items.map((item, i) => (
-              <div key={i} style={{ marginBottom: '2px' }}>
-                <div style={{ fontSize: '10px' }}>{item.item_name}</div>
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <span style={{ fontSize: '10px' }}>&nbsp;{formatCurrency(item.unit_price)}/{item.unit}</span>
-                  <span>{item.quantity}&nbsp;&nbsp;&nbsp;{formatCurrency(item.line_total)}</span>
-                </div>
-              </div>
-            )) : <div style={{ textAlign: 'center', color: '#666', margin: '4px 0' }}>(item details unavailable)</div>}
+            {items.length > 0 ? (
+              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '10px' }}>
+                <tbody>
+                  {items.map((item, i) => (
+                    <tr key={i}>
+                      <td style={{ textAlign: 'left', verticalAlign: 'top', padding: '2px 2px 2px 0' }}>
+                        {item.item_name}
+                        {item.unit && <div style={{ fontSize: '9px', color: '#555' }}>{item.unit}</div>}
+                      </td>
+                      <td style={{ textAlign: 'center', verticalAlign: 'top', padding: '2px' }}>{item.quantity}</td>
+                      <td style={{ textAlign: 'right', verticalAlign: 'top', padding: '2px' }}>{formatCurrency(item.unit_price)}</td>
+                      <td style={{ textAlign: 'right', verticalAlign: 'top', padding: '2px 0 2px 2px', fontWeight: 'bold' }}>{formatCurrency(item.line_total)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : <div style={{ textAlign: 'center', color: '#666', margin: '4px 0' }}>(item details unavailable)</div>}
 
             <div style={{ borderTop: '1px dashed #000', margin: '6px 0' }} />
             <div style={{ display: 'flex', justifyContent: 'space-between' }}><span>SUBTOTAL</span><span>{formatCurrency(sale.subtotal)}</span></div>
